@@ -36,5 +36,22 @@
             </div>
         </div>
     @endforeach
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            @if($signedIn)
+            <form action="{{ $thread->path('reply') }}" method="POST">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <textarea name="body" class="form-control" rows="6" placeholder="Have something to say..."></textarea>
+                </div>
+                <button class="btn btn-default">Reply</button>
+            </form>
+            @else
+            <div>
+                <p>Please <a href="{{ route('login') }}">sign in</a> to participate in this thread</p>
+            </div>
+            @endif
+        </div>
+    </div>
 </div>
 @endsection
