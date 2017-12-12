@@ -21,10 +21,10 @@ class UserCanParticipateTest extends TestCase
     /** @test */
     public function a_user_can_participate_in_forum_if_logged_in()
     {
-        $this->get($this->thread->path())
-            ->see('Reply');
         $reply = factory('App\Reply')->make();
-        $this->post($this->thread->path('reply'), $reply->toArray())
-            ->see($reply->body);
+
+        $this->post($this->thread->path('reply'), $reply->toArray());
+
+        $this->get($this->thread->path())->see($reply->body);
     }
 }
