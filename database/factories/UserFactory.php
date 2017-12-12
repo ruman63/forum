@@ -28,14 +28,20 @@ $factory->define(App\Thread::class, function (Faker $faker) {
     return [
         'title' => title_case($faker->sentence),
         'body' => $faker->paragraph,
-        'user_id' => factory(App\User::class)->create()->id,
+        'user_id' => function () {
+            return factory(App\User::class)->create()->id;
+        }
     ];
 });
 
 $factory->define(App\Reply::class, function (Faker $faker) {
     return [
         'body' => $faker->paragraph,
-        'thread_id' => factory(App\Thread::class)->create()->id,
-        'user_id' => factory(App\User::class)->create()->id,
+        'thread_id' => function () {
+            return factory(App\Thread::class)->create()->id;
+        },
+        'user_id' => function () {
+            return factory(App\User::class)->create()->id;
+        }
     ];
 });
