@@ -7,7 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4>
-                    {{ $thread->title }}
+                    {{ $thread->owner->name }} <small>posted</small> {{ $thread->title }}
                 </h4> 
                 </div>
                 <div class="panel-body">
