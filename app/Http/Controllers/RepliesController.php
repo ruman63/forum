@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
+use App\Thread;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,15 +24,6 @@ class RepliesController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -39,14 +31,13 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id)
+    public function store($channelId, Thread $thread)
     {
-        $reply = Reply::create([
-            'body' => $request->body,
-            'user_id' => Auth::id(),
-            'thread_id' => $id,
+        $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id(),
         ]);
-        return redirect()->to('/threads/'.$id);
+        return redirect()->back();
     }
 
     /**

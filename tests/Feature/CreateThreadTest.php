@@ -12,20 +12,17 @@ class CreateThreadTest extends TestCase
 {
     use DatabaseMigrations;
     
-    /** @test */
-    public function a_guest_user_may_not_see_create_thread_page()
-    {
-        $this->withExceptionHandling()
-            ->get('/threads/create')
-            ->assertRedirectedToRoute('login');
-    }
-
+    
     /** @test */
     public function a_guest_user_may_not_create_a_thread()
     {
-        $this->expectException(AuthenticationException::class);
-        $thread = make('App\Thread');
-        $this->post('/threads', $thread->toArray());
+        $this->withExceptionHandling();
+
+        $this->get('/threads/create')
+            ->assertRedirectedToRoute('login');
+
+        $this->post('/threads')
+            ->assertRedirectedToRoute('login');
     }
     
     /** @test */
@@ -34,9 +31,10 @@ class CreateThreadTest extends TestCase
         $user = $this->signIn();
         $thread = make('App\Thread');
 
-        $this->post('/threads', $thread->toArray());
+        $this->post('/threads', $thread->toArray())
+            ->assertRedirectedTo("/threads/{$thread->channel->slug}/1");
 
-        $this->get($thread->path())
+        $this->get("/threads/{$thread->channel->slug}/1")
             ->see($user->name)
             ->see($thread->body)
             ->see($thread->title);

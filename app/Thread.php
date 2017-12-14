@@ -19,9 +19,19 @@ class Thread extends Model
         return $this->hasMany('App\Reply');
     }
 
+    public function channel()
+    {
+        return $this->belongsTo('App\Channel');
+    }
+
+    public function addReply($attributes)
+    {
+        $this->replies()->create($attributes);
+    }
+    
     public function path($append = '')
     {
-        $path = "/threads/$this->id";
+        $path = "/threads/{$this->channel->slug}/{$this->id}";
         $path .= empty($append) ? '' : '/'.$append;
         return $path;
     }

@@ -20,8 +20,8 @@ class UserCanParticipateTest extends TestCase
     /** @test */
     public function an_unauthorized_user_can_not_create_replies()
     {
-        $this->expectException(AuthenticationException::class);
-        $this->post('/threads/1/reply', ['body' => 'FooBar']);
+        $this->post('/threads/some-channel/1/reply')
+            ->assertRedirectedToRoute('login');
     }
     /** @test */
     public function a_user_can_participate_in_forum_if_logged_in()
