@@ -23,6 +23,19 @@ class UserCanParticipateTest extends TestCase
         $this->post('/threads/some-channel/1/reply')
             ->assertRedirectedToRoute('login');
     }
+
+    /** @test */
+    public function a_reply_to_thread_requires_body()
+    {
+        $this->signIn();
+        
+        $reply = make('App\Reply', ['body' => null]);
+
+        $this->post($this->thread->path('reply'), $reply->toArray())
+            ->assertSessionHasErrors('body');
+    }
+    
+    
     /** @test */
     public function a_user_can_participate_in_forum_if_logged_in()
     {
