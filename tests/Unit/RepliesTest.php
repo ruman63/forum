@@ -10,7 +10,7 @@ class RepliesTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->reply = factory('App\Reply')->create();
+        $this->reply = create('App\Reply');
     }
     /** @test */
     public function it_test_thread_has_a_owner_relationship()

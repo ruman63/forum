@@ -11,7 +11,7 @@ class ThreadsTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create('App\Thread');
     }
     /** @test */
     public function it_test_thread_has_a_owner_relationship()

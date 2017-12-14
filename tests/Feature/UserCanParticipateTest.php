@@ -15,7 +15,7 @@ class UserCanParticipateTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create('App\Thread');
     }
     /** @test */
     public function an_unauthorized_user_can_not_create_replies()
@@ -26,9 +26,9 @@ class UserCanParticipateTest extends TestCase
     /** @test */
     public function a_user_can_participate_in_forum_if_logged_in()
     {
-        $this->be(factory('App\User')->create());
+        $this->signIn();
         
-        $reply = factory('App\Reply')->make();
+        $reply = make('App\Reply');
 
         $this->post($this->thread->path('reply'), $reply->toArray());
 
