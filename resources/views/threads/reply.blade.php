@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+    <div class="panel-heading level">
+        <h5 class="flex">
+            <a href="#">{{ $reply->owner->name }}</a> said 
+            {{ $reply->created_at->diffForHumans() }}
+        </h5>
+        @if(auth()->check())
+            <div>
+                <form method="POST" action="{{ route('replies.favorite', $reply->id) }}">
+                    {{ csrf_field() }}
+                    <button type="submit" class="btn btn-default" {{ $reply->isFavorited() ? 'disabled' : '' }}>
+                        {{ $reply->favorites()->count()." ".str_plural('Favorite', $reply->favorites()->count()) }} 
+                    </button>
+                </form>
+            </div>
+        @else
+            <strong> {{ $reply->favorites()->count()." ".str_plural('Favorite', $reply->favorites()->count()) }} </strong>
+        @endif
+    </div>
+    <div class="panel-body">
+        <article>
+            {{ $reply->body }}
+        </article>
+    </div>
+</div>

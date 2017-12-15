@@ -4,6 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4>
@@ -16,20 +17,12 @@
                     </article>
                 </div>
             </div>
+            
             @foreach($replies as $reply)
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a href="#">{{ $reply->owner->name }}</a> said 
-                        {{ $reply->created_at->diffForHumans() }}
-                    </div>
-                    <div class="panel-body">
-                        <article>
-                            {{ $reply->body }}
-                        </article>
-                    </div>
-                </div>
+                @include('threads.reply')
             @endforeach
             {{ $replies->links() }}
+
             @if(auth()->check())
                 <form action="{{ $thread->path('reply') }}" method="POST">
                     {{ csrf_field() }}
@@ -41,6 +34,7 @@
             @else
                 <p>Please <a href="{{ route('login') }}">sign in</a> to participate in this thread</p>
             @endif
+            
         </div>
         <div class="col-md-4">
             <div class="panel panel-default">
