@@ -39,6 +39,19 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_filter_threads_by_username()
+    {
+        $this->withExceptionHandling()->signIn(create('App\User', ['name' => 'JohnDoe']));
+
+        $threadByJohn = create('App\Thread', ['user_id' => auth()->id()]);
+        $threadNotByJohn = create('App\Thread');
+        
+        $this->get("/threads?by=JohnDoe")
+            ->see($threadByJohn->title)
+            ->dontSee($threadNotByJohn->title);
+    }
+
+    /** @test */
     public function a_user_can_view_single_thread()
     {
         $this->get($this->thread->path())
