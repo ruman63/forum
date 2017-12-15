@@ -12,6 +12,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        body { padding-bottom: 100px; }
+        .level { display: flex; }
+        .flex { flex: 1; }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -43,6 +48,7 @@
 
                             <ul class="dropdown-menu">
                                 <li><a href="/threads">All Thread</a></li>
+                                <li><a href="/threads?popular=1">Popular Threads</a></li>
                                 @if(auth()->check())
                                     <li><a href="/threads?by={{ auth()->user()->name }}">My Threads</a></li>
                                 @endif
