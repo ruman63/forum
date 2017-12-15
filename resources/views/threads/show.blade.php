@@ -38,7 +38,7 @@
     @endforeach
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            @if($signedIn)
+            @if(auth()->check())
             <form action="{{ $thread->path('reply') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="form-group">
