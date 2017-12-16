@@ -15,7 +15,7 @@ class FavoritesTest extends TestCase
     {
         $this->withExceptionHandling()
             ->post('replies/1/favorite')
-            ->assertRedirectedToRoute('login');
+            ->assertRedirect('/login');
     }
 
     /** @test */
@@ -25,8 +25,8 @@ class FavoritesTest extends TestCase
 
         $reply = create('App\Reply');
 
-        $this->post('replies/'. $reply->id .'/favorite')
-            ->assertCount(1, $reply->favorites);
+        $this->post('replies/'. $reply->id .'/favorite');
+        $this->assertCount(1, $reply->favorites);
     }
 
     /** @test */
@@ -37,7 +37,7 @@ class FavoritesTest extends TestCase
         $reply = create('App\Reply');
 
         $this->post('replies/'. $reply->id .'/favorite');
-        $this->post('replies/'. $reply->id .'/favorite')
-            ->assertCount(1, $reply->favorites);
+        $this->post('replies/'. $reply->id .'/favorite');
+        $this->assertCount(1, $reply->favorites);
     }
 }

@@ -19,39 +19,39 @@ class CreateThreadTest extends TestCase
         $this->withExceptionHandling();
 
         $this->get('/threads/create')
-            ->assertRedirectedToRoute('login');
+            ->assertRedirect('/login');
 
         $this->post('/threads')
-            ->assertRedirectedToRoute('login');
+            ->assertRedirect('/login');
     }
     
     /** @test */
     public function a_logged_in_user_can_create_a_thread()
     {
-        $this->withExceptionHandling();
         $user = $this->signIn();
         $thread = make('App\Thread');
 
-        $this->post('/threads', $thread->toArray())
-            ->assertRedirectedTo("/threads/{$thread->channel->slug}/1");
+        $response = $this->post('/threads', $thread->toArray());
 
-        $this->get($this->response->headers->get('Location'))
-            ->see($user->name)
-            ->see($thread->body)
-            ->see($thread->title);
+        $this->get($response->headers->get('Location'))
+            ->assertSee($user->name)
+            ->assertSee($thread->body)
+            ->assertSee($thread->title);
     }
 
     /** @test */
     public function a_thread_requires_title()
     {
-        $this->publishThread(['title' => null])
+        $this->withExceptionHandling()
+            ->publishThread(['title' => null])
             ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function a_thread_requires_body()
     {
-        $this->publishThread(['body' => null])
+        $this->withExceptionHandling()
+            ->publishThread(['body' => null])
             ->assertSessionHasErrors('body');
     }
 
@@ -60,7 +60,8 @@ class CreateThreadTest extends TestCase
     {
         factory('App\Channel', 2)->create();
         
-        $this->publishThread(['channel_id' => null])
+        $this->withExceptionHandling()
+            ->publishThread(['channel_id' => null])
             ->assertSessionHasErrors('channel_id');
 
         $this->publishThread(['channel_id' => 999])

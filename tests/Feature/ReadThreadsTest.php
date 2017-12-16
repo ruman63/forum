@@ -20,9 +20,8 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_view_all_threads()
     {
         $response = $this->get('/threads')
-            ->assertResponseOk()
-            ->see($this->thread->title)
-            ->see($this->thread->body);
+            ->assertSee($this->thread->title)
+            ->assertSee($this->thread->body);
     }
 
     /** @test */
@@ -33,9 +32,8 @@ class ReadThreadsTest extends TestCase
         $threadNotInChannel = create('App\Thread');
         
         $this->get("/threads/{$channel->slug}")
-            ->assertResponseOk()
-            ->see($threadInChannel->title)
-            ->dontSee($threadNotInChannel->title);
+            ->assertSee($threadInChannel->title)
+            ->assertDontSee($threadNotInChannel->title);
     }
 
     /** @test */
@@ -47,8 +45,8 @@ class ReadThreadsTest extends TestCase
         $threadNotByJohn = create('App\Thread');
         
         $this->get("/threads?by=JohnDoe")
-            ->see($threadByJohn->title)
-            ->dontSee($threadNotByJohn->title);
+            ->assertSee($threadByJohn->title)
+            ->assertDontSee($threadNotByJohn->title);
     }
 
     /** @test */
@@ -65,7 +63,7 @@ class ReadThreadsTest extends TestCase
         
         $threadWithNoReply = $this->thread;
             
-        $response = $this->getJson("/threads?popular=1")->decodeResponseJson();
+        $response = $this->getJson("/threads?popular=1")->json();
         $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
         // ->see($threadByJohn->title
         // ->dontSee($threadNotByJohn->title);
@@ -75,9 +73,8 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_view_single_thread()
     {
         $this->get($this->thread->path())
-            ->assertResponseOk()
-            ->see($this->thread->title)
-            ->see($this->thread->body);
+            ->assertSee($this->thread->title)
+            ->assertSee($this->thread->body);
     }
 
     /** @test */
@@ -85,7 +82,6 @@ class ReadThreadsTest extends TestCase
     {
         $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
         $this->get($this->thread->path())
-            ->assertResponseOk()
-            ->see($reply->body);
+            ->assertSee($reply->body);
     }
 }

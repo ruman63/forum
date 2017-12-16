@@ -20,14 +20,15 @@ class UserCanParticipateTest extends TestCase
     /** @test */
     public function an_unauthorized_user_can_not_create_replies()
     {
-        $this->post('/threads/some-channel/1/reply')
-            ->assertRedirectedToRoute('login');
+        $this->withExceptionHandling()
+            ->post('/threads/some-channel/1/reply')
+            ->assertRedirect('login');
     }
 
     /** @test */
     public function a_reply_to_thread_requires_body()
     {
-        $this->signIn();
+        $this->withExceptionHandling()->signIn();
         
         $reply = make('App\Reply', ['body' => null]);
 
@@ -45,6 +46,6 @@ class UserCanParticipateTest extends TestCase
 
         $this->post($this->thread->path('reply'), $reply->toArray());
 
-        $this->get($this->thread->path())->see($reply->body);
+        $this->get($this->thread->path())->assertSee($reply->body);
     }
 }
