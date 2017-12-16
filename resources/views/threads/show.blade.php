@@ -7,9 +7,18 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <h4>
-                    <a href="/profiles/{{ $thread->owner->id }}">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
-                </h4> 
+                    <div class="level">
+                        <h4 class="flex">
+                            <a href="/profiles/{{ $thread->owner->id }}">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
+                        </h4> 
+                        @if(Auth::check())
+                            <form method="POST" action="{{ '/threads/'. $thread->channel->slug . '/' . $thread->id }}">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
+                        @endif
+                    </div>
                 </div>
                 <div class="panel-body">
                     <article>
