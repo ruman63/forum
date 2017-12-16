@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Favorite;
+use App\RecordsActivity;
 
 class Reply extends Model
 {
-    use Favoritable;
+    use Favoritable, RecordsActivity;
     
     protected $fillable = ['body', 'thread_id', 'user_id'];
     protected $with = ['owner', 'favorites'];

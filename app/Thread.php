@@ -2,12 +2,15 @@
 
 namespace App;
 
+use App\Activity;
 use App\Filters\ThreadsFilter;
 use Illuminate\Database\Eloquent\Model;
+use App\RecordsActivity;
 
 class Thread extends Model
 {
-    /**@var array */
+    use RecordsActivity;
+    
     protected $guarded = [];
 
     protected $with = ['owner', 'channel'];
@@ -24,7 +27,6 @@ class Thread extends Model
             $thread->replies()->delete();
         });
     }
-    
     
     public function owner()
     {
