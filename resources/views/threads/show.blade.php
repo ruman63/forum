@@ -11,13 +11,13 @@
                         <h4 class="flex">
                             <a href="/profiles/{{ $thread->owner->name }}">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
                         </h4> 
-                        @if(Auth::check())
+                        @can('update', $thread)
                             <form method="POST" action="{{ '/threads/'. $thread->channel->slug . '/' . $thread->id }}">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <button type="submit" class="btn btn-link">Delete</button>
                             </form>
-                        @endif
+                        @endcan
                     </div>
                 </div>
                 <div class="panel-body">

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Channel;
+use Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,12 @@ class AppServiceProvider extends ServiceProvider
                 return Channel::all();
             });
             return $view->with('channels', $channels);
+        });
+
+        Gate::before(function ($user) {
+            if ($user->id === 1) {
+                return true;
+            }
         });
     }
 
