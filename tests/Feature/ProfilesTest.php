@@ -15,7 +15,7 @@ class ProfilesTest extends TestCase
     public function users_can_view_users_profiles()
     {
         $user = create('App\User');
-        $this->get("/profiles/{$user->id}")
+        $this->get("/profiles/{$user->name}")
             ->assertSee($user->name);
     }
 
@@ -25,7 +25,7 @@ class ProfilesTest extends TestCase
         $user = create('App\User');
 
         $thread = create('App\Thread', ['user_id' => $user->id]);
-        $this->get("/profiles/{$user->id}")
+        $this->get("/profiles/{$user->name}")
             ->assertSee($thread->title);
     }
 }

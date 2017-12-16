@@ -55,18 +55,53 @@ class CreateThreadTest extends TestCase
             ->assertSessionHasErrors('body');
     }
 
+    
     /** @test */
     public function a_thread_requires_a_valid_channel_id()
     {
-        factory('App\Channel', 2)->create();
+        create('App\Channel', [], 2);
         
         $this->withExceptionHandling()
-            ->publishThread(['channel_id' => null])
-            ->assertSessionHasErrors('channel_id');
-
+        ->publishThread(['channel_id' => null])
+        ->assertSessionHasErrors('channel_id');
+        
         $this->publishThread(['channel_id' => 999])
         ->assertSessionHasErrors('channel_id');
     }
+    
+    /////////////////////////////////////////////////////////
+    //                  THREAD DELETE TESTS                //
+    /////////////////////////////////////////////////////////
+    
+
+    /** @test */
+    public function a_guest_user_cannot_delete_thread()
+    {
+        $this->withExceptionHandling();
+
+        $thread = create('App\Thread');
+        
+        $this->delete($thread->path())
+            ->assertRedirect('/login');
+
+        $this->assertDatabaseHas('threads', ['id' => $thread->id]);
+    }
+
+    /** @test */
+    public function a_logged_in_user_can_delete_thread()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread');
+        $reply = create('App\Reply', ['thread_id' => $thread->id]);
+
+        $this->delete($thread->path())
+            ->assertRedirect('/threads');
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    // Local Helpers
 
     protected function publishThread($overrides = [])
     {
