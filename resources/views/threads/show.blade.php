@@ -8,7 +8,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                 <h4>
-                    <a href="">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
+                    <a href="/profiles/{{ $thread->owner->id }}">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
                 </h4> 
                 </div>
                 <div class="panel-body">
@@ -41,7 +41,7 @@
                 <div class="panel-body">
                     <p>
                         This thread was posted {{ $thread->created_at->diffForHumans() }} by 
-                        <a href="#">{{ $thread->owner->name }}</a> and has currently has 
+                        <a href="/profiles/{{ $thread->owner->id }}">{{ $thread->owner->name }}</a> and has currently has 
                         {{ $thread->replies_count }} {{ str_plural('reply', $thread->replies_count) }}
                     </p>
                 </div>

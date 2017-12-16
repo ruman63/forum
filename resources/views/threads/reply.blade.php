@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading level">
         <h5 class="flex">
-            <a href="#">{{ $reply->owner->name }}</a> said 
+            <a href="/profiles/{{ $reply->owner->id }}">{{ $reply->owner->name }}</a> said 
             {{ $reply->created_at->diffForHumans() }}
         </h5>
         @if(auth()->check())
