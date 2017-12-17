@@ -24,7 +24,9 @@ class Thread extends Model
         });
 
         static::deleting(function ($thread) {
-            $thread->replies()->delete();
+            // Collection Shorthand used
+            // Collection->each->delete()  === Collection->each(function ($item){ $item->delete(); })
+            $thread->replies->each->delete();
         });
     }
     
