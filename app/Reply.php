@@ -12,7 +12,7 @@ class Reply extends Model
     
     protected $fillable = ['body', 'thread_id', 'user_id'];
     protected $with = ['owner', 'favorites'];
-
+    protected $appends = ['favoritesCount', 'isFavorited'];
     
     public function owner()
     {
