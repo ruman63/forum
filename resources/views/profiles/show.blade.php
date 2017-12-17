@@ -19,7 +19,11 @@
                         @endif
                     @endforeach
                 @empty
-                     <p class="text-center">No activity for this user.</p>
+                     <div class="panel panel-default">
+                         <div class="panel-body">
+                            {{ $profileUser->name  }} has no activities yet. 
+                         </div>
+                     </div>
                 @endforelse
             </div>
         </div>
