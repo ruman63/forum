@@ -40,6 +40,20 @@ class ActivityTest extends TestCase
             'subject_type' => get_class($reply),
         ]);
     }
+    /** @test */
+    public function it_records_an_activity_when_a_reply_is_favorited()
+    {
+        $this->signIn();
+        $reply = create('App\Reply');
+        $favorite = $reply->favorite();
+
+        $this->assertDatabaseHas('activities', [
+            'type' => 'created_favorite',
+            'user_id' => auth()->id(),
+            'subject_id' => $favorite->id,
+            'subject_type' => get_class($favorite),
+        ]);
+    }
 
     /** @test */
     public function it_generates_users_feed_in_proper_format()

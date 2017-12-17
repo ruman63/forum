@@ -14,7 +14,9 @@
                         <h4>{{ $date }}</h4>
                     </div>
                     @foreach($activities as $activity)
-                        @include("profiles.activities.{$activity->type}")
+                        @if(view()->exists("profiles.activities.{$activity->type}"))
+                            @include("profiles.activities.{$activity->type}")
+                        @endif
                     @endforeach
                 @empty
                      <p class="text-center">No activity for this user.</p>
