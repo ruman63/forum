@@ -23,24 +23,20 @@
         <div class="panel-body">
             <div v-if="editing">
                 <div class="form-group">
-                    <textarea class="form-control" v-model="reply.body"></textarea>
+                    <textarea class="form-control" v-model="body"></textarea>
                 </div>
                 <div class="level">
-                    <button class="btn btn-primary btn-xs" @click="updateReply">Update</button>
+                    <button class="btn btn-primary btn-xs" @click="update">Update</button>
                     <button class="btn btn-link btn-xs" @click="editing = false">Cancel</button>
                 </div>
             </div>
-            <article v-else v-text="reply.body"></article>
+            <article v-else v-text="body"></article>
         </div>
         @can('update', $reply)
             <div class="panel-footer">
                 <div class="level">
                     <button class="btn btn-default btn-xs" @click="editing = true" >Edit</button>
-                    <form method="POST" action="{{ route('replies.destroy', $reply->id) }}">
-                        {{ csrf_field() }}
-                        {{ method_field('DELETE') }}
-                        <button type="submit" class="btn btn-danger btn-xs"> Delete </button>
-                    </form>
+                    <button class="btn btn-danger btn-xs" @click="destroy"> Delete </button>
                 </div>
             </div>
         @endcan

@@ -43363,21 +43363,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             editing: false,
-            reply: {}
+            body: ''
         };
     },
 
     methods: {
-        updateReply: function updateReply() {
-            axios.patch('/replies/' + this.reply.id, {
-                body: this.reply.body
+        update: function update() {
+            axios.patch('/replies/' + this.attributes.id, {
+                body: this.body
             });
             this.editing = false;
             flash("Your reply has been updated!");
+        },
+        destroy: function destroy() {
+            axios.delete('/replies/' + this.attributes.id);
+            $(this.$el).fadeOut(300, function () {
+                return flash("You reply has been deleted");
+            });
         }
     },
     created: function created() {
-        this.reply = this.attributes;
+        this.body = this.attributes.body;
     }
 });
 

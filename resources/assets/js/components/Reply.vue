@@ -4,20 +4,24 @@
         data() {
             return {
                 editing: false,
-                reply: {},
+                body: '',
             };
         },
         methods: {
-            updateReply() {
-                axios.patch('/replies/' + this.reply.id, {
-                    body: this.reply.body,
+            update() {
+                axios.patch('/replies/' + this.attributes.id, {
+                    body: this.body,
                 });
                 this.editing = false;
                 flash("Your reply has been updated!");
+            },
+            destroy() {
+                axios.delete('/replies/' + this.attributes.id); 
+                $(this.$el).fadeOut(300, () => flash("You reply has been deleted"))
             }
         },
         created() {
-            this.reply = this.attributes;
+            this.body = this.attributes.body;
         }
     }
 </script>
