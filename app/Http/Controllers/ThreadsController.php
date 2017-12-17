@@ -59,7 +59,7 @@ class ThreadsController extends Controller
             'channel_id' => request('channel_id'),
             'user_id' => auth()->id(),
         ]);
-        return redirect()->to($thread->path());
+        return redirect()->to($thread->path())->with('flash', "Thread created successfully");
     }
 
     /**
