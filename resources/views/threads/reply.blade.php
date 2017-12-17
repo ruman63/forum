@@ -16,6 +16,7 @@
             @else
                 <strong> {{ $reply->favorites_count." ".str_plural('Favorite', $reply->favorites_count) }} </strong>
             @endif
+            
         </div>
     </div>
     <div class="panel-body">
@@ -23,4 +24,13 @@
             {{ $reply->body }}
         </article>
     </div>
+    @can('update', $reply)
+        <div class="panel-footer">
+            <form method="POST" action="{{ route('replies.destroy', $reply->id) }}">
+                {{ csrf_field() }}
+                {{ method_field('DELETE') }}
+                <button type="submit" class="btn btn-danger btn-xs"> Delete </button>
+            </form>
+        </div>
+    @endcan
 </div>

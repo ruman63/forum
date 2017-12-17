@@ -16,6 +16,7 @@
         body { padding-bottom: 100px; }
         .level { display: flex; align-items: center;}
         .flex { flex: 1; }
+        .level > * { padding: 0px 3px; }
     </style>
 </head>
 <body>

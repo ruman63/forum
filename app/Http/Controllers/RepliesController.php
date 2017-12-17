@@ -86,6 +86,8 @@ class RepliesController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+        $reply->delete();
+        return back()->with('flash', 'You reply was deleted');
     }
 }

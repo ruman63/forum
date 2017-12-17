@@ -17,15 +17,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('threads', "ThreadsController@index")->name('threads.index');
 Route::get('threads/create', "ThreadsController@create")->name('threads.create');
 Route::get('threads/{channel}/{thread}', "ThreadsController@show")->name('threads.show');
 Route::delete('threads/{channel}/{thread}', "ThreadsController@destroy")->name('threads.destroy');
+Route::get('threads/{channel?}', "ThreadsController@index")->name('threads.index');
 
 Route::post('threads', "ThreadsController@store")->name('threads.store');
-Route::get('threads/{channel}', "ThreadsController@index");
 
 Route::post('threads/{channel}/{thread}/reply', "RepliesController@store")->name('replies.store');
 Route::post('replies/{reply}/favorite', "FavoritesController@store")->name('replies.favorite');
+Route::delete('replies/{reply}', "RepliesController@destroy")->name('replies.destroy');
 
 Route::get('profiles/{user}', "ProfilesController@show")->name('profiles');
