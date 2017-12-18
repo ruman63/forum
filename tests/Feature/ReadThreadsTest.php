@@ -84,4 +84,15 @@ class ReadThreadsTest extends TestCase
         $this->get($this->thread->path())
             ->assertSee($reply->body);
     }
+    /** @test */
+    public function a_user_can_fetch_replies_related_to_a_thread()
+    {
+        factory('App\Reply')->create(['thread_id' => $this->thread->id]);
+        factory('App\Reply')->create(['thread_id' => $this->thread->id]);
+        factory('App\Reply')->create(['thread_id' => $this->thread->id]);
+        $response = $this->getJson($this->thread->path('replies'))->json();
+
+        $this->assertCount(3, $response['data']);
+        $this->assertEquals($response['total'], 3);
+    }
 }

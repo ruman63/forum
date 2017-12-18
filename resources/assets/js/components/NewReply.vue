@@ -16,7 +16,6 @@
 </template>
 <script>
     export default {
-        props: ['action'],
         data() {
             return {
                 body: ''
@@ -25,11 +24,14 @@
         computed: {
             signedIn() {
                 return window.App.signedIn;
+            },
+            url() {
+                return location.pathname + '/reply';
             }
         },
         methods: {
             create() {
-                axios.post(this.action, {body: this.body})
+                axios.post(this.url, {body: this.body})
                     .then(({data}) => {
                         this.body = '';
                         flash('Your reply was left');

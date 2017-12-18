@@ -5,7 +5,7 @@
                 <span class="flex">
                     <a :href="'/profiles/' + reply.owner.name " v-text="reply.owner.name"></a> 
                     <small>said</small> 
-                    <span v-text="reply.created_at"></span>
+                    <span v-text="ago"></span>
                 </span>
                 <favorite :reply="reply" v-if="signedIn"></favorite>
             </div>
@@ -34,12 +34,16 @@
 
 <script>
     import Favorite from './Favorite.vue';
+    import moment from 'moment';
     export default {
         props: ['data'],
         components: { Favorite },
         computed: {
             signedIn() {
                 return window.App.signedIn;
+            },
+            ago() {
+                return moment(this.reply.created_at).fromNow();
             },
             canUpdate() {
                 return this.authorize(user => {
@@ -64,7 +68,8 @@
                 flash("Your reply has been updated!");
             },
             destroy() {
-                axios.delete('/replies/' + this.data.id); 
+                axios.delete('/replies/' + this.data.id)
+                    .then((response) => flash('Your reply was deleted!'));
                 this.$emit('deleted');
             }
         },
