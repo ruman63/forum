@@ -21,11 +21,13 @@ export default {
         },
         favorite() {
             axios.post(this.endpoint);
+            flash('You liked a reply');
             this.active = true;
             this.count++;
         },
         unfavorite() {
             axios.delete(this.endpoint);
+            flash('You unliked a reply');
             this.active = false;
             this.count--;
         }
