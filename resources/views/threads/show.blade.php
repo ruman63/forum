@@ -5,7 +5,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-    
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="level">
@@ -27,24 +26,7 @@
                         </article>
                     </div>
                 </div>
-                <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
-                {{--  @foreach($replies as $reply)
-                    @include('threads.reply')
-                @endforeach  --}}
-                {{--  {{ $replies->links() }}  --}}
-    
-                @if(auth()->check())
-                    <form action="{{ $thread->path('reply') }}" method="POST">
-                        {{ csrf_field() }}
-                        <div class="form-group">
-                            <textarea name="body" class="form-control" rows="6" placeholder="Have something to say..."></textarea>
-                        </div>
-                        <button class="btn btn-default">Reply</button>
-                    </form>
-                @else
-                    <p>Please <a href="{{ route('login') }}">sign in</a> to participate in this thread</p>
-                @endif
-                
+                <replies :data="{{ $thread->replies }}" @removed="repliesCount--" @added="repliesCount++"></replies>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-default">

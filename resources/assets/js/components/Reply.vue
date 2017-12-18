@@ -22,14 +22,12 @@
             </div>
             <article v-else v-text="body"></article>
         </div>
-        <!-- @can('update', $reply) -->
-            <div class="panel-footer" v-if="canUpdate">
-                <div class="level">
-                    <button class="btn btn-default btn-xs" @click="editing = true" >Edit</button>
-                    <button class="btn btn-danger btn-xs" @click="destroy"> Delete </button>
-                </div>
+        <div class="panel-footer" v-if="canUpdate">
+            <div class="level">
+                <button class="btn btn-default btn-xs" @click="editing = true" >Edit</button>
+                <button class="btn btn-danger btn-xs" @click="destroy"> Delete </button>
             </div>
-        <!-- @endcan -->
+        </div>
     </div>
 </template>
 
