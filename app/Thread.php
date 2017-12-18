@@ -19,13 +19,7 @@ class Thread extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('replyCount', function ($builder) {
-            return $builder->withCount('replies');
-        });
-
         static::deleting(function ($thread) {
-            // Collection Shorthand used
-            // Collection->each->delete()  === Collection->each(function ($item){ $item->delete(); })
             $thread->replies->each->delete();
         });
     }

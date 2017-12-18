@@ -50,6 +50,18 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_filter_unanswered_threads()
+    {
+        $threadHavingReply = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadHavingReply->id]);
+        $threadNotHavingReply = $this->thread;
+
+        $this->get('/threads?unanswered=1')
+            ->assertSee($threadNotHavingReply->body)
+            ->assertDontSee($threadHavingReply->body);
+    }
+
+    /** @test */
     public function a_user_can_filter_threads_by_popularity()
     {
         $this->withExceptionHandling()->signIn();
@@ -77,13 +89,6 @@ class ReadThreadsTest extends TestCase
             ->assertSee($this->thread->body);
     }
 
-    /** @test */
-    public function a_user_can_read_replies_associated_with_a_thread()
-    {
-        $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
-    }
     /** @test */
     public function a_user_can_fetch_replies_related_to_a_thread()
     {

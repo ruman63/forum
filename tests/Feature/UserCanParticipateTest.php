@@ -46,7 +46,8 @@ class UserCanParticipateTest extends TestCase
 
         $this->post($this->thread->path('reply'), $reply->toArray());
 
-        $this->get($this->thread->path())->assertSee($reply->body);
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
+        $this->assertEquals(1, $this->thread->fresh()->replies_count);
     }
 
     /** @test */
@@ -67,10 +68,10 @@ class UserCanParticipateTest extends TestCase
     public function authorized_user_can_delete_a_reply()
     {
         $this->signIn();
-        $reply = create('App\Reply', ['user_id' => auth()->id()]);
-        
+        $reply = create('App\Reply', ['user_id' => auth()->id(), 'thread_id' => $this->thread->id]);
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
         $this->assertDatabaseMissing('replies', [ 'id' => $reply->id ]);
+        $this->assertEquals(0, $this->thread->fresh()->replies_count);
     }
 
     /** @test */
@@ -80,7 +81,7 @@ class UserCanParticipateTest extends TestCase
         $this->withExceptionHandling();
         $this->patch("/replies/{$reply->id}")
             ->assertRedirect('/login');
-
+            
         $this->signIn();
         $this->patch("/replies/{$reply->id}")->assertStatus(403);
 
