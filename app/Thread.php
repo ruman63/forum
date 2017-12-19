@@ -55,12 +55,18 @@ class Thread extends Model
     public function addReply($attributes)
     {
         $reply = $this->replies()->create($attributes);
-        $this->subscriptions->filter(function ($subscription) use ($reply) {
-            return $subscription->user_id != $reply->user_id;
-        })
-        ->each->notifyUser(new ThreadWasUpdated($this, $reply));
+
+        $this->notifySubscribers($reply);
 
         return $reply;
+    }
+    
+    public function notifySubscribers($reply)
+    {
+        $this->subscriptions
+        ->where('user_id', '!=', $reply->user_id)
+        ->each
+        ->notify($reply);
     }
     
     public function path($append = '')
