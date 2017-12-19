@@ -36,3 +36,5 @@ Route::patch('replies/{reply}', "RepliesController@update")->name('replies.updat
 Route::delete('replies/{reply}', "RepliesController@destroy")->name('replies.destroy');
 
 Route::get('profiles/{user}', "ProfilesController@show")->name('profiles');
+Route::delete('profiles/{user}/notifications/{notification}', "NotificationsController@destroy")->name('notifications.destroy');
+Route::get('profiles/{user}/notifications/', "NotificationsController@index")->name('notifications.index');

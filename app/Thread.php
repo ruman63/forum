@@ -6,6 +6,7 @@ use App\Activity;
 use App\Filters\ThreadsFilter;
 use Illuminate\Database\Eloquent\Model;
 use App\RecordsActivity;
+use App\Notifications\ThreadWasUpdated;
 
 class Thread extends Model
 {
@@ -53,7 +54,13 @@ class Thread extends Model
 
     public function addReply($attributes)
     {
-        return $this->replies()->create($attributes);
+        $reply = $this->replies()->create($attributes);
+        $this->subscriptions->filter(function ($subscription) use ($reply) {
+            return $subscription->user_id != $reply->user_id;
+        })
+        ->each->notifyUser(new ThreadWasUpdated($this, $reply));
+
+        return $reply;
     }
     
     public function path($append = '')
