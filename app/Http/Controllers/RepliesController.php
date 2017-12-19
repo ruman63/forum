@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Reply;
 use App\Thread;
+use App\Spam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,12 +32,11 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, Spam $spam)
     {
-        $this->validate(request(), [
-            'body' => 'required'
-        ]);
-        
+        $this->validate(request(), ['body' => 'required']);
+        $spam->detect(request('body'));
+
         $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id(),
@@ -45,8 +45,6 @@ class RepliesController extends Controller
         if (request()->expectsJson()) {
             return $reply->load('owner');
         }
-
-
         return back()->with('flash', "Your reply has been left");
     }
 

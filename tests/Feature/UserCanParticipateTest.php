@@ -89,6 +89,19 @@ class UserCanParticipateTest extends TestCase
     }
 
     /** @test */
+    public function an_exception_is_thrown_if_a_user_submits_a_spam_reply()
+    {
+        $this->signIn();
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', [
+            'body' => 'Yahoo Customer Support'
+        ]);
+        $this->expectException(\Exception::class);
+
+        $this->post($thread->path('reply'), $reply->toArray());
+    }
+    
+    /** @test */
     public function authorized_user_can_update_a_reply()
     {
         $this->signIn();
