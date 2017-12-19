@@ -3,6 +3,8 @@
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ThreadWasUpdated;
 
 class ThreadsTest extends TestCase
 {
@@ -63,7 +65,21 @@ class ThreadsTest extends TestCase
 
         $this->assertCount(0, $thread->fresh()->subscriptions);
     }
+    /** @test */
+    public function it_notifies_registered_subscribers_when_it_has_a_new_reply()
+    {
+        Notification::fake();
+        $this->signIn();
 
+        $thread = create('App\Thread')->subscribe();
+
+        $thread->addReply([
+            'user_id' => 999,
+            'body' => 'Foo Bar'
+        ]);
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
+    }
     /** @test */
     public function it_knows_if_user_is_subscribed_to()
     {
