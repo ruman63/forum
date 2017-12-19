@@ -50,4 +50,17 @@ class ThreadsTest extends TestCase
         ]);
         $this->assertCount(1, $this->thread->replies);
     }
+
+    /** @test */
+    public function a_thread_can_be_subscribed_to_and_unsubscribed_from()
+    {
+        $this->signIn();
+        $thread = create('App\Thread')->subscribe();
+
+        $this->assertCount(1, $thread->subscriptions);
+
+        $thread->unsubscribe();
+
+        $this->assertCount(0, $thread->fresh()->subscriptions);
+    }
 }

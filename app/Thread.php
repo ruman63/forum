@@ -39,6 +39,11 @@ class Thread extends Model
         return $this->belongsTo('App\Channel');
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
+
     public function scopeFilter($query, ThreadsFilter $filters)
     {
         return $filters->apply($query);
@@ -54,5 +59,23 @@ class Thread extends Model
         $path = "/threads/{$this->channel->slug}/{$this->id}";
         $path .= empty($append) ? '' : '/'.$append;
         return $path;
+    }
+
+    public function subscribe($userId = null)
+    {
+        $this->subscriptions()->create([
+            'user_id' => $userId ?: auth()->id()
+        ]);
+
+        return $this;
+    }
+
+    public function unsubscribe($userId = null)
+    {
+        $this->subscriptions()
+            ->where('user_id', $userId ?: auth()->id())
+            ->delete();
+            
+        return $this;
     }
 }
