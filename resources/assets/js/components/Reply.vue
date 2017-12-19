@@ -63,9 +63,10 @@
             update() {
                 axios.patch('/replies/' + this.data.id, {
                     body: this.body,
-                });
+                })
+                .catch(error => flash(error.response.data, 'danger'))
+                .then(response => flash("Your reply has been updated!"));
                 this.editing = false;
-                flash("Your reply has been updated!");
             },
             destroy() {
                 axios.delete('/replies/' + this.data.id)

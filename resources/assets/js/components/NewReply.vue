@@ -32,6 +32,7 @@
         methods: {
             create() {
                 axios.post(this.url, {body: this.body})
+                    .catch(error => flash( error.response.data, 'danger' ))
                     .then(({data}) => {
                         this.body = '';
                         flash('Your reply was left');
