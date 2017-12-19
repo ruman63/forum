@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Reply;
 use App\Thread;
-use App\Spam;
+use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,10 +32,9 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread, Spam $spam)
+    public function store($channelId, Thread $thread)
     {
-        $this->validate(request(), ['body' => 'required']);
-        $spam->detect(request('body'));
+        $this->validateReply();
 
         $reply = $thread->addReply([
             'body' => request('body'),
@@ -79,6 +78,9 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
+
+        $this->validateReply();
+        
         $reply->update(['body' => request('body')]);
 
         if (request()->expectsJson()) {
@@ -104,5 +106,11 @@ class RepliesController extends Controller
         }
         
         return back()->with('flash', 'You reply was deleted');
+    }
+
+    protected function validateReply()
+    {
+        $this->validate(request(), ['body' => 'required']);
+        resolve(Spam::class)->detect(request('body'));
     }
 }
