@@ -38,7 +38,7 @@ class ThreadsTest extends TestCase
     public function thread_can_create_path_string()
     {
         $this->assertEquals(
-            "/threads/{$this->thread->channel->slug}/{$this->thread->id}",
+            "/threads/{$this->thread->channel->slug}/{$this->thread->id}/",
             $this->thread->path()
         );
     }
@@ -65,6 +65,7 @@ class ThreadsTest extends TestCase
 
         $this->assertCount(0, $thread->fresh()->subscriptions);
     }
+    
     /** @test */
     public function it_notifies_registered_subscribers_when_it_has_a_new_reply()
     {
@@ -80,6 +81,20 @@ class ThreadsTest extends TestCase
 
         Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
     }
+
+    /** @test */
+    public function it_can_track_if_thread_is_updated_for_authenticated_user_since_he_last_visited_it()
+    {
+        $this->signIn();
+        $thread = create('App\Thread');
+
+        $this->assertTrue($thread->hasChangedFor(auth()->id()));
+
+        $thread->read();
+        
+        $this->assertFalse($thread->fresh()->hasChangedFor(auth()->id()));
+    }
+
     /** @test */
     public function it_knows_if_user_is_subscribed_to()
     {

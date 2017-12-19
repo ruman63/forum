@@ -7,6 +7,7 @@ use App\Filters\ThreadsFilter;
 use Illuminate\Database\Eloquent\Model;
 use App\RecordsActivity;
 use App\Notifications\ThreadWasUpdated;
+use Carbon\Carbon;
 
 class Thread extends Model
 {
@@ -60,7 +61,25 @@ class Thread extends Model
 
         return $reply;
     }
+
+    public function hasChangedFor($userId)
+    {
+        $key = $this->visitedCacheKey($userId);
+        return $this->updated_at > cache($key);
+    }
     
+
+    public function read()
+    {
+        $key = $this->visitedCacheKey();
+        cache()->forever($key, Carbon::now());
+    }
+    
+    public function visitedCacheKey($userId = null)
+    {
+        return sprintf("user.%s.read.%s", $userId ?: auth()->id(), $this->id);
+    }
+
     public function notifySubscribers($reply)
     {
         $this->subscriptions
@@ -71,8 +90,8 @@ class Thread extends Model
     
     public function path($append = '')
     {
-        $path = "/threads/{$this->channel->slug}/{$this->id}";
-        $path .= empty($append) ? '' : '/'.$append;
+        $path = "/threads/{$this->channel->slug}/{$this->id}/";
+        $path .=  $append;
         return $path;
     }
 
