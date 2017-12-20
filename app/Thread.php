@@ -2,12 +2,15 @@
 
 namespace App;
 
+use App\User;
 use App\Activity;
-use App\Filters\ThreadsFilter;
-use Illuminate\Database\Eloquent\Model;
-use App\RecordsActivity;
-use App\Notifications\ThreadWasUpdated;
 use Carbon\Carbon;
+use App\RecordsActivity;
+use App\Filters\ThreadsFilter;
+use App\Notifications\YourMention;
+use Illuminate\Database\Eloquent\Model;
+use App\Notifications\ThreadWasUpdated;
+use App\Events\ThreadReceivedReply;
 
 class Thread extends Model
 {
@@ -56,9 +59,9 @@ class Thread extends Model
     public function addReply($attributes)
     {
         $reply = $this->replies()->create($attributes);
-
-        $this->notifySubscribers($reply);
-
+        
+        event(new ThreadReceivedReply($reply));
+        
         return $reply;
     }
 
@@ -68,7 +71,6 @@ class Thread extends Model
         return $this->updated_at > cache($key);
     }
     
-
     public function read()
     {
         $key = $this->visitedCacheKey();
@@ -78,14 +80,6 @@ class Thread extends Model
     public function visitedCacheKey($userId = null)
     {
         return sprintf("user.%s.read.%s", $userId ?: auth()->id(), $this->id);
-    }
-
-    public function notifySubscribers($reply)
-    {
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->user_id)
-            ->each
-            ->notify($reply);
     }
     
     public function path()

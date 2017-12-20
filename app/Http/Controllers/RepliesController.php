@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Reply;
-use App\User;
 use App\Thread;
 use App\Rules\SpamFree;
 use Illuminate\Http\Request;
-use App\Notifications\YourMention;
 use App\Http\Requests\CreateReplyRequest;
 
 class RepliesController extends Controller
@@ -36,19 +34,10 @@ class RepliesController extends Controller
      */
     public function store($channelId, Thread $thread, CreateReplyRequest $request)
     {
-        $reply = $thread->addReply([
+        return $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id(),
             ])->load('owner');
-            
-        preg_match_all('/\\@([^\\s\\.]+)/', request('body'), $matches);
-
-        foreach ($matches[1] as $name) {
-            if ($user = User::whereName($name)->first()) {
-                $user->notify(new YourMention($reply));
-            }
-        }
-        return $reply;
     }
 
     /**

@@ -38,6 +38,13 @@ class Reply extends Model
         return $this->belongsTo('App\Thread');
     }
 
+    public function mentionedUsers()
+    {
+        preg_match_all('/\\@([^\\s\\.]+)/', $this->body, $matches);
+        return $matches[1];
+    }
+    
+
     public function wasJustPublished()
     {
         return $this->created_at > Carbon::now()->subMinute();

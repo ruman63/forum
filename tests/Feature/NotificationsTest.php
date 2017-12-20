@@ -19,7 +19,7 @@ class NotificationsTest extends TestCase
     }
     
     /** @test */
-    public function a_notification_is_prepared_for_the_subscribed_user_when_thread_is_replied_by_someone_else()
+    public function a_notification_is_preprared_for_the_subscribed_user_when_thread_is_replied_by_someone_else()
     {
         $thread = create('App\Thread')->subscribe();
 
