@@ -1,15 +1,18 @@
 <template>
     <div>
         <div v-if="signedIn">
-            <div class="form-group">
-                <textarea name="body" 
-                    class="form-control" 
-                    rows="6" 
-                    v-model="body"
-                    placeholder="Have something to say...">
-                </textarea>
-            </div>
-            <button class="btn btn-default" @click="create">Reply</button>
+            <form @submit.prevent="create">
+                <div class="form-group">
+                    <textarea name="body" 
+                        class="form-control" 
+                        rows="6" 
+                        v-model="body"
+                        placeholder="Have something to say..."
+                        required>
+                    </textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Reply</button>
+            </form>
         </div>
         <p v-else>Please <a href="/login">sign in</a> to participate in this thread</p>
     </div>

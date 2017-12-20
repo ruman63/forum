@@ -37,7 +37,7 @@ class RepliesController extends Controller
         return $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id(),
-            ])->load('owner');
+        ])->load('owner');
     }
 
     /**
@@ -49,12 +49,11 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
-        try {
-            request()->validate(['body' => ['required ', new SpamFree] ]);
-            $reply->update(['body' => request('body')]);
-        } catch (\Exception $e) {
-            return response("Your Reply contains Spam!!", 422);
-        }
+
+        request()->validate(['body' => ['required ', new SpamFree] ]);
+
+        $reply->update(['body' => request('body')]);
+        
         return $reply->load('owner');
     }
 

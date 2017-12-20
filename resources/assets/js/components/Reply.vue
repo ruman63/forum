@@ -12,13 +12,15 @@
         </div>
         <div class="panel-body">
             <div v-if="editing">
-                <div class="form-group">
-                    <textarea class="form-control" v-model="body"></textarea>
-                </div>
-                <div class="level">
-                    <button class="btn btn-primary btn-xs" @click="update">Update</button>
-                    <button class="btn btn-link btn-xs" @click="editing = false">Cancel</button>
-                </div>
+                <form @submit.prevent="update">
+                    <div class="form-group">
+                        <textarea class="form-control" v-model="body" required></textarea>
+                    </div>
+                    <div class="level">
+                        <button class="btn btn-primary btn-xs" type="submit">Update</button>
+                        <button class="btn btn-link btn-xs" type="button" @click="cancel">Cancel</button>
+                    </div>
+                </form>
             </div>
             <article v-else v-text="body"></article>
         </div>
@@ -64,9 +66,17 @@
                 axios.patch('/replies/' + this.data.id, {
                     body: this.body,
                 })
-                .catch(error => flash(error.response.data, 'danger'))
-                .then(response => flash("Your reply has been updated!"));
+                .then(response => {flash("Your reply has been updated!")})
+                .catch(error => {
+                    console.log("error");
+                    flash(error.response.data, 'danger');
+                    this.body = this.data.body;
+                });
                 this.editing = false;
+            },
+            cancel() {
+                editing = false; 
+                this.body = this.data.body;
             },
             destroy() {
                 axios.delete('/replies/' + this.data.id)

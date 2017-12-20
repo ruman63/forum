@@ -60116,6 +60116,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -60148,14 +60150,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         update: function update() {
+            var _this2 = this;
+
             axios.patch('/replies/' + this.data.id, {
                 body: this.body
-            }).catch(function (error) {
-                return flash(error.response.data, 'danger');
             }).then(function (response) {
-                return flash("Your reply has been updated!");
+                flash("Your reply has been updated!");
+            }).catch(function (error) {
+                console.log("error");
+                flash(error.response.data, 'danger');
+                _this2.body = _this2.data.body;
             });
             this.editing = false;
+        },
+        cancel: function cancel() {
+            editing = false;
+            this.body = this.data.body;
         },
         destroy: function destroy() {
             axios.delete('/replies/' + this.data.id).then(function (response) {
@@ -60596,52 +60606,63 @@ var render = function() {
       _c("div", { staticClass: "panel-body" }, [
         _vm.editing
           ? _c("div", [
-              _c("div", { staticClass: "form-group" }, [
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.body,
-                      expression: "body"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  domProps: { value: _vm.body },
+              _c(
+                "form",
+                {
                   on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.body = $event.target.value
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.update($event)
                     }
                   }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "level" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btn-xs",
-                    on: { click: _vm.update }
-                  },
-                  [_vm._v("Update")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-link btn-xs",
-                    on: {
-                      click: function($event) {
-                        _vm.editing = false
+                },
+                [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.body,
+                          expression: "body"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { required: "" },
+                      domProps: { value: _vm.body },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.body = $event.target.value
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("Cancel")]
-                )
-              ])
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "level" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary btn-xs",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Update")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link btn-xs",
+                        attrs: { type: "button" },
+                        on: { click: _vm.cancel }
+                      },
+                      [_vm._v("Cancel")]
+                    )
+                  ])
+                ]
+              )
             ])
           : _c("article", { domProps: { textContent: _vm._s(_vm.body) } })
       ]),
@@ -60756,6 +60777,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -60800,38 +60824,52 @@ var render = function() {
   return _c("div", [
     _vm.signedIn
       ? _c("div", [
-          _c("div", { staticClass: "form-group" }, [
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.body,
-                  expression: "body"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                name: "body",
-                rows: "6",
-                placeholder: "Have something to say..."
-              },
-              domProps: { value: _vm.body },
+          _c(
+            "form",
+            {
               on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.body = $event.target.value
+                submit: function($event) {
+                  $event.preventDefault()
+                  _vm.create($event)
                 }
               }
-            })
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            { staticClass: "btn btn-default", on: { click: _vm.create } },
-            [_vm._v("Reply")]
+            },
+            [
+              _c("div", { staticClass: "form-group" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.body,
+                      expression: "body"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    name: "body",
+                    rows: "6",
+                    placeholder: "Have something to say...",
+                    required: ""
+                  },
+                  domProps: { value: _vm.body },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.body = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-default", attrs: { type: "submit" } },
+                [_vm._v("Reply")]
+              )
+            ]
           )
         ])
       : _c("p", [

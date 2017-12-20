@@ -19,11 +19,12 @@ abstract class Filter
     public function apply($builder)
     {
         $this->builder = $builder;
-        $this->getFilters()->filter(function ($filter) {
-            return method_exists($this, $filter);
-        })->each(function ($filter, $value) {
-            $this->$filter($value);
-        });
+        $this->getFilters()
+            ->filter(function ($filter) {
+                return method_exists($this, $filter);
+            })->each(function ($filter, $value) {
+                $this->$filter($value);
+            });
         return $this->builder;
     }
 
