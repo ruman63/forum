@@ -32,7 +32,7 @@ class UserCanParticipateTest extends TestCase
         
         $reply = make('App\Reply', ['body' => null]);
 
-        $this->post($this->thread->path() .'/replies', $reply->toArray())
+        $this->postJson($this->thread->path() .'/replies', $reply->toArray())
             ->assertStatus(422);
     }
     
@@ -44,7 +44,7 @@ class UserCanParticipateTest extends TestCase
         
         $reply = make('App\Reply');
 
-        $this->post($this->thread->path(). '/replies', $reply->toArray());
+        $this->postJson($this->thread->path(). '/replies', $reply->toArray());
 
         $this->assertDatabaseHas('replies', ['body' => $reply->body]);
         $this->assertEquals(1, $this->thread->fresh()->replies_count);
@@ -91,20 +91,20 @@ class UserCanParticipateTest extends TestCase
     /** @test */
     public function an_exception_is_thrown_if_a_user_submits_a_spam_reply()
     {
-        $this->signIn();
+        $this->withExceptionHandling()->signIn();
         $thread = create('App\Thread');
         $reply = make('App\Reply', [
             'body' => 'Yahoo Customer Support'
         ]);
 
-        $this->post($thread->path() .'/replies', $reply->toArray())
+        $this->postJson($thread->path() .'/replies', $reply->toArray())
             ->assertStatus(422);
     }
 
     /** @test */
     public function user_may_not_reply_more_than_once_per_minute()
     {
-        $this->signIn();
+        $this->withExceptionHandling()->signIn();
         $thread = create('App\Thread');
         $reply = make('App\Reply', [
             'body' => 'A Decent Reply'
