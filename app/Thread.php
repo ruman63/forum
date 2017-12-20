@@ -83,16 +83,14 @@ class Thread extends Model
     public function notifySubscribers($reply)
     {
         $this->subscriptions
-        ->where('user_id', '!=', $reply->user_id)
-        ->each
-        ->notify($reply);
+            ->where('user_id', '!=', $reply->user_id)
+            ->each
+            ->notify($reply);
     }
     
-    public function path($append = '')
+    public function path()
     {
-        $path = "/threads/{$this->channel->slug}/{$this->id}/";
-        $path .=  $append;
-        return $path;
+        return "/threads/{$this->channel->slug}/{$this->id}";
     }
 
     public function subscribe($userId = null)

@@ -24,7 +24,7 @@ Route::get('threads/{channel?}', "ThreadsController@index")->name('threads.index
 
 Route::post('threads', "ThreadsController@store")->name('threads.store');
 
-Route::post('threads/{channel}/{thread}/reply', "RepliesController@store")->name('replies.store');
+Route::post('threads/{channel}/{thread}/replies', "RepliesController@store")->name('replies.store');
 Route::get('threads/{channel}/{thread}/replies', "RepliesController@index")->name('replies.index');
 
 Route::post('threads/{channel}/{thread}/subscriptions', "ThreadSubscriptionsController@store")->name('thread.subscriptions.store');

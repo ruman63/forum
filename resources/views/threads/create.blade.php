@@ -18,7 +18,7 @@
                             <select name="channel_id" class="form-control" required placeholder="Select A Channel">
                                 <option value=""> Select A Channel </option>
                                 @foreach($channels as $channel)
-                                    <option value="{{ $channel->id }}" {{ ($channel->id === old('channel_id')) ? "selected" : '' }} required>
+                                    <option value="{{ $channel->id }}" {{ ($channel->id == old('channel_id')) ? "selected" : '' }} required>
                                         {{ $channel->name }}
                                     </option>
                                 @endforeach

@@ -18,7 +18,7 @@ class SubscriptionToThreadsTest extends TestCase
 
         $thread = create('App\Thread');
 
-        $this->post($thread->path('subscriptions'));
+        $this->post($thread->path() . '/subscriptions');
 
         $this->assertDatabaseHas('thread_subscriptions', [
             'user_id' => auth()->id(),
@@ -33,7 +33,7 @@ class SubscriptionToThreadsTest extends TestCase
 
         $thread = create('App\Thread')->subscribe();
 
-        $this->delete($thread->path('subscriptions'));
+        $this->delete($thread->path() . '/subscriptions');
 
         $this->assertDatabaseMissing('thread_subscriptions', [
             'user_id' => auth()->id(),

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Reply;
 use App\Thread;
-use App\Inspections\Spam;
+use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,14 +35,14 @@ class RepliesController extends Controller
     public function store($channelId, Thread $thread)
     {
         try {
-            $this->validateReply();
+            request()->validate(['body' => ['required ', new SpamFree] ]);
 
             $reply = $thread->addReply([
                 'body' => request('body'),
                 'user_id' => auth()->id(),
             ]);
         } catch (\Exception $e) {
-            return response($e->getMessage(), 422);
+            return response("Your Reply contains Spam!!", 422);
         }
 
         return $reply->load('owner');
@@ -80,10 +80,10 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
         try {
-            $this->validateReply();
+            request()->validate(['body' => ['required ', new SpamFree] ]);
             $reply->update(['body' => request('body')]);
         } catch (\Exception $e) {
-            return response($e->getMessage(), 422);
+            return response("Your Reply contains Spam!!", 422);
         }
         return $reply->load('owner');
     }
@@ -104,11 +104,5 @@ class RepliesController extends Controller
         }
         
         return back()->with('flash', 'You reply was deleted');
-    }
-
-    protected function validateReply()
-    {
-        $this->validate(request(), ['body' => 'required']);
-        resolve(Spam::class)->detect(request('body'));
     }
 }

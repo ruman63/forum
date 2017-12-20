@@ -21,7 +21,7 @@ class UserCanParticipateTest extends TestCase
     public function an_unauthorized_user_can_not_create_replies()
     {
         $this->withExceptionHandling()
-            ->post('/threads/some-channel/1/reply')
+            ->post('/threads/some-channel/1/replies')
             ->assertRedirect('login');
     }
 
@@ -32,8 +32,8 @@ class UserCanParticipateTest extends TestCase
         
         $reply = make('App\Reply', ['body' => null]);
 
-        $this->post($this->thread->path('reply'), $reply->toArray())
-            ->assertSessionHasErrors('body');
+        $this->post($this->thread->path() .'/replies', $reply->toArray())
+            ->assertStatus(422);
     }
     
     
@@ -44,7 +44,7 @@ class UserCanParticipateTest extends TestCase
         
         $reply = make('App\Reply');
 
-        $this->post($this->thread->path('reply'), $reply->toArray());
+        $this->post($this->thread->path(). '/replies', $reply->toArray());
 
         $this->assertDatabaseHas('replies', ['body' => $reply->body]);
         $this->assertEquals(1, $this->thread->fresh()->replies_count);
@@ -96,9 +96,9 @@ class UserCanParticipateTest extends TestCase
         $reply = make('App\Reply', [
             'body' => 'Yahoo Customer Support'
         ]);
-        $this->expectException(\Exception::class);
 
-        $this->post($thread->path('reply'), $reply->toArray());
+        $this->post($thread->path() .'/replies', $reply->toArray())
+            ->assertStatus(422);
     }
     
     /** @test */

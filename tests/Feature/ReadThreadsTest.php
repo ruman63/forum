@@ -95,7 +95,7 @@ class ReadThreadsTest extends TestCase
         factory('App\Reply')->create(['thread_id' => $this->thread->id]);
         factory('App\Reply')->create(['thread_id' => $this->thread->id]);
         factory('App\Reply')->create(['thread_id' => $this->thread->id]);
-        $response = $this->getJson($this->thread->path('replies'))->json();
+        $response = $this->getJson($this->thread->path() . '/replies')->json();
 
         $this->assertCount(3, $response['data']);
         $this->assertEquals($response['total'], 3);

@@ -26,7 +26,7 @@
                 return window.App.signedIn;
             },
             url() {
-                return location.pathname + '/reply';
+                return location.pathname + '/replies';
             }
         },
         methods: {

@@ -60010,7 +60010,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 var query = location.search.match(/page=(\d+)/);
                 page = query ? query[1] : 1;
             }
-            return location.pathname + "replies?page=" + page;
+            return location.pathname + "/replies?page=" + page;
         },
         refresh: function refresh(_ref) {
             var data = _ref.data;
@@ -60769,7 +60769,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return window.App.signedIn;
         },
         url: function url() {
-            return location.pathname + '/reply';
+            return location.pathname + '/replies';
         }
     },
     methods: {
