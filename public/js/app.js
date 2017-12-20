@@ -60664,7 +60664,7 @@ var render = function() {
                 ]
               )
             ])
-          : _c("article", { domProps: { textContent: _vm._s(_vm.body) } })
+          : _c("article", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
       _vm.canUpdate

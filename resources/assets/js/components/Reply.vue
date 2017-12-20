@@ -22,7 +22,7 @@
                     </div>
                 </form>
             </div>
-            <article v-else v-text="body"></article>
+            <article v-else v-html="body"></article>
         </div>
         <div class="panel-footer" v-if="canUpdate">
             <div class="level">

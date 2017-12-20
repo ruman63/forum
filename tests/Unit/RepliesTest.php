@@ -28,4 +28,22 @@ class RepliesTest extends TestCase
         $reply = create('App\Reply', ['created_at' => Carbon::now()->subMinute(2)]);
         $this->assertFalse($reply->wasJustPublished());
     }
+
+    /** @test */
+    public function it_knows_all_the_mentioned_users_names()
+    {
+        $reply = new \App\Reply([
+            'body' => "@john, @jane_doe @someone-else!"
+        ]);
+        $this->assertEquals($reply->mentionedUsers(), ['john', 'jane_doe', 'someone-else']);
+    }
+
+    /** @test */
+    public function it_wraps_mentioned_users_names_int_the_body_within_anchor_tag()
+    {
+        $reply = new \App\Reply([
+            'body' => "hello, @john!"
+        ]);
+        $this->assertEquals($reply->body, 'hello, <a href="/profiles/john">@john</a>!');
+    }
 }
