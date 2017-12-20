@@ -4,6 +4,7 @@
             <form @submit.prevent="create">
                 <div class="form-group">
                     <textarea name="body" 
+                        id="body"
                         class="form-control" 
                         rows="6" 
                         v-model="body"
@@ -18,6 +19,8 @@
     </div>
 </template>
 <script>
+    import 'at.js';
+    import 'jquery.caret';
     export default {
         data() {
             return {
@@ -42,6 +45,22 @@
                         this.$emit('created', data);
                     });
             }
+        },
+        mounted() {
+            $('#body').atwho({
+                at: '@',
+                delay: 750,
+                callbacks: {
+                    remoteFilter: function(query, callback) {
+                        console.log(query);
+                        axios.get('/api/users', {
+                            params: {
+                                name: query
+                            }
+                        }).then(response => callback(response.data));
+                    }
+                }
+            });
         }
     }
 </script>

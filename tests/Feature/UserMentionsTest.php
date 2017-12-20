@@ -25,4 +25,17 @@ class UserMentionsTest extends TestCase
         $this->post($thread->path(). '/replies', $reply->toArray());
         $this->assertCount(1, $john->notifications);
     }
+
+
+    /** @test */
+    public function it_fetches_all_user_names_matching_name_query()
+    {
+        create('App\User', ['name' => 'John Doe']);
+        create('App\User', ['name' => 'John Doe2']);
+        create('App\User', ['name' => 'Jane Doe2']);
+
+        $result = $this->json('GET', '/api/users', ['name' => 'john']);
+
+        $this->assertEquals(['John Doe', 'John Doe2'], $result->json());
+    }
 }

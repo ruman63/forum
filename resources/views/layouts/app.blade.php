@@ -26,6 +26,7 @@
         .level > *:first-child { margin-left: 0;}
         [v-cloak] { display: none; }
     </style>
+    @yield('header')
 </head>
 <body>
     <div id="app">
