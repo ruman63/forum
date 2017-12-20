@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Favorite;
 use App\RecordsActivity;
+use Carbon\Carbon;
 
 class Reply extends Model
 {
@@ -37,6 +38,11 @@ class Reply extends Model
         return $this->belongsTo('App\Thread');
     }
 
+    public function wasJustPublished()
+    {
+        return $this->created_at > Carbon::now()->subMinute();
+    }
+    
     public function path()
     {
         return $this->thread->path() . "#reply-{$this->id}";

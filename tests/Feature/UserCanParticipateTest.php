@@ -100,7 +100,22 @@ class UserCanParticipateTest extends TestCase
         $this->post($thread->path() .'/replies', $reply->toArray())
             ->assertStatus(422);
     }
-    
+
+    /** @test */
+    public function user_may_not_reply_more_than_once_per_minute()
+    {
+        $this->signIn();
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', [
+            'body' => 'A Decent Reply'
+        ]);
+
+        $this->post($thread->path() .'/replies', $reply->toArray())
+            ->assertStatus(200);
+        $this->post($thread->path() .'/replies', $reply->toArray())
+            ->assertStatus(429);
+    }
+
     /** @test */
     public function authorized_user_can_update_a_reply()
     {
