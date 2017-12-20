@@ -40,3 +40,4 @@ Route::delete('profiles/{user}/notifications/{notification}', "NotificationsCont
 Route::get('profiles/{user}/notifications/', "NotificationsController@index")->name('notifications.index');
 
 Route::get('api/users', "Api\UsersController@index");
+Route::post('api/users/{user}/avatar', "Api\UsersAvatarController@store");
