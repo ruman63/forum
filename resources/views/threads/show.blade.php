@@ -10,6 +10,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="level">
+                            <img src="{{ asset($thread->owner->avatar()) }}" alt="{{ $thread->owner->name }}" width="25" >
                             <h4 class="flex">
                                 <a href="/profiles/{{ $thread->owner->name }}">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
                             </h4> 
