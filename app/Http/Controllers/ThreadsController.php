@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Thread;
 use App\Channel;
+use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use App\Filters\ThreadsFilter;
-use App\Rules\SpamFree;
+use Illuminate\Support\Facades\Redis;
 
 class ThreadsController extends Controller
 {
@@ -27,7 +28,10 @@ class ThreadsController extends Controller
         if (request()->wantsJson()) {
             return $threads;
         }
-        return view('threads.index', compact('threads'));
+        return view('threads.index', [
+            'threads' => $threads,
+            'trending' => array_map('json_decode', Redis::zrevrange('trending_threads', 0, 4))
+        ]);
     }
 
     /**
@@ -73,6 +77,12 @@ class ThreadsController extends Controller
     public function show($channelId, Thread $thread)
     {
         $thread->read();
+
+        Redis::zincrby('trending_threads', 1, json_encode([
+            'title' => $thread->title,
+            'link' => $thread->path()
+        ]));
+        
         return view('threads.show', compact('thread'));
     }
 
