@@ -9,6 +9,7 @@ use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use App\Filters\ThreadsFilter;
 use Illuminate\Support\Facades\Redis;
+use App\Trending;
 
 class ThreadsController extends Controller
 {
@@ -22,16 +23,14 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, ThreadsFilter $filters)
+    public function index(Channel $channel, ThreadsFilter $filters, Trending $trending)
     {
         $threads = $this->getThreads($channel, $filters);
         if (request()->wantsJson()) {
             return $threads;
         }
-        return view('threads.index', [
-            'threads' => $threads,
-            'trending' => array_map('json_decode', Redis::zrevrange('trending_threads', 0, 4))
-        ]);
+        $trendingThreads = $trending->get();
+        return view('threads.index', compact('threads', 'trendingThreads'));
     }
 
     /**
@@ -74,14 +73,11 @@ class ThreadsController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show($channelId, Thread $thread)
+    public function show($channelId, Thread $thread, Trending $trending)
     {
         $thread->read();
 
-        Redis::zincrby('trending_threads', 1, json_encode([
-            'title' => $thread->title,
-            'link' => $thread->path()
-        ]));
+        $trending->push($thread);
         
         return view('threads.show', compact('thread'));
     }
