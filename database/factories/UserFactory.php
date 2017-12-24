@@ -30,6 +30,7 @@ $factory->define(App\Thread::class, function (Faker $faker) {
     return [
         'title' => title_case($faker->sentence),
         'body' => $faker->paragraph,
+        'visits' => 0,
         'user_id' => function () {
             return factory(App\User::class)->create()->id;
         },

@@ -100,4 +100,12 @@ class ReadThreadsTest extends TestCase
         $this->assertCount(3, $response['data']);
         $this->assertEquals($response['total'], 3);
     }
+
+    /** @test */
+    public function a_user_can_see_threads_correct_visits()
+    {
+        $thread = create('App\Thread');
+        $this->call('GET', $thread->path());
+        $this->get('/threads')->assertSee('1 visit');
+    }
 }

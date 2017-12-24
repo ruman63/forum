@@ -107,4 +107,15 @@ class ThreadsTest extends TestCase
 
         $this->assertTrue($thread->isSubscribedTo);
     }
+
+    /** @test */
+    public function it_increments_visits()
+    {
+        $thread = create('App\Thread');
+        $this->assertSame(0, $thread->visits);
+
+        $thread->increment('visits');
+
+        $this->assertEquals(1, $thread->visits);
+    }
 }

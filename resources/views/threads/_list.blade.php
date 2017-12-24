@@ -26,6 +26,9 @@
                 {{ $thread->body }}
             </article>
         </div>
+        <div class="panel-footer">
+            <strong>{{ $thread->visits . ' ' . str_plural('visit', $thread->visits) }}</strong>
+        </div>
     </div>
 @empty
     <div class="panel panel-default">
