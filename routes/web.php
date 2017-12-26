@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Auth::routes();
+Route::get('/register/confirm', 'Auth\RegisterConfirmController@index')->name('register.confirm');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('threads/create', "ThreadsController@create")->name('threads.create');
