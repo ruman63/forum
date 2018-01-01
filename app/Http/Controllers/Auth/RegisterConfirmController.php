@@ -12,11 +12,11 @@ class RegisterConfirmController extends Controller
     {
         $user = User::where('confirmation_token', request('token'))->first();
         if (!$user) {
-            return redirect('/home')->with('flash', 'Invalid Token');
+            return redirect(route('threads.index'))->with('flash', 'Invalid Token');
         }
 
         $user->confirm();
 
-        return redirect('/threads')->with('flash', 'You are now a confirmed User, you can start posting.');
+        return redirect(route('threads.index'))->with('flash', 'You are now a confirmed User, you can start posting.');
     }
 }

@@ -53,4 +53,12 @@ class RegistrationTest extends TestCase
             $this->assertNull($user->confirmation_token);
         });
     }
+
+    /** @test */
+    public function it_does_not_verify_users_with_invalid_token()
+    {
+        $this->get(route('register.confirm', ['token' => 'invalid']))
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash', 'Invalid Token');
+    }
 }

@@ -28,7 +28,11 @@ class CreateThreadTest extends TestCase
     /** @test */
     public function user_must_confrm_their_emails_before_start_creating_threads()
     {
-        $this->publishThread()
+        $user = factory('App\User')->states('unconfirmed')->create();
+        
+        $this->withExceptionHandling()->signIn($user);
+        $thread = make('App\Thread');
+        $this->post('/threads', $thread->toArray())
             ->assertRedirect('/threads')
             ->assertSessionHas('flash', 'You must confirm email, before posting anything!');
     }
