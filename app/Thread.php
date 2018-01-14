@@ -105,6 +105,26 @@ class Thread extends Model
         return $this;
     }
 
+    public function setSlugAttribute($value)
+    {
+        if (static::whereSlug($slug = str_slug($value))->exists()) {
+            $this->attributes['slug'] = $this->incrementSlug($slug);
+        } else {
+            $this->attributes['slug'] = $slug;
+        }
+    }
+
+    public function incrementSlug($slug)
+    {
+        $latest = static::whereTitle($this->title)->latest('id')->value('slug');
+        if (preg_match('/(\d)$/', $latest)) {
+            return preg_replace_callback('/(\d+)$/', function ($matches) {
+                return $matches[1] + 1;
+            }, $latest);
+        } else {
+            return "{$slug}-2";
+        }
+    }
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()

@@ -80,6 +80,18 @@ class CreateThreadTest extends TestCase
         $this->publishThread(['channel_id' => 999])
         ->assertSessionHasErrors('channel_id');
     }
+
+    /** @test */
+    public function a_thread_requires_a_unique_slug()
+    {
+        $this->signIn();
+        
+        $thread = create('App\Thread', ['title' => 'See My Post', 'slug' => 'see-my-post']);
+
+        $this->post('/threads', $thread->toArray());
+
+        $this->assertDatabaseHas('threads', ['title' => 'See My Post', 'slug' => 'see-my-post-2']);
+    }
     
     /////////////////////////////////////////////////////////
     //                  THREAD DELETE TESTS                //
