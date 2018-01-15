@@ -60480,6 +60480,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -60496,7 +60497,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             id: this.data.id,
             editing: false,
             reply: this.data,
-            body: ''
+            body: '',
+            isBest: this.data.isBest
         };
     },
 
@@ -60524,10 +60526,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return flash('Your reply was deleted!');
             });
             this.$emit('deleted');
+        },
+        markBest: function markBest() {
+            var _this2 = this;
+
+            axios.post('/replies/' + this.id + '/best').then(function () {
+                return window.events.$emit('best-reply-selected', _this2.id);
+            });
         }
     },
     created: function created() {
+        var _this3 = this;
+
         this.body = this.data.body;
+        window.events.$on('best-reply-selected', function (id) {
+            _this3.isBest = _this3.id === id;
+        });
     }
 });
 
@@ -60928,7 +60942,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "panel panel-default", attrs: { id: "reply-" + _vm.id } },
+    {
+      staticClass: "panel",
+      class: _vm.isBest ? "panel-success" : "panel-default",
+      attrs: { id: "reply-" + _vm.id }
+    },
     [
       _c("div", { staticClass: "panel-heading" }, [
         _c(
@@ -61018,31 +61036,56 @@ var render = function() {
           : _c("article", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
-      _vm.authorize("updateReply", _vm.reply)
-        ? _c("div", { staticClass: "panel-footer" }, [
-            _c("div", { staticClass: "level" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-default btn-xs",
-                  on: {
-                    click: function($event) {
-                      _vm.editing = true
-                    }
+      _vm.authorize("updateReply", _vm.reply) ||
+      (_vm.authorize("updateThread", _vm.reply.thread) && !_vm.isBest)
+        ? _c("div", { staticClass: "panel-footer level" }, [
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.authorize("updateReply", _vm.reply),
+                    expression: "authorize('updateReply', reply)"
                   }
-                },
-                [_vm._v("Edit")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger btn-xs",
-                  on: { click: _vm.destroy }
-                },
-                [_vm._v(" Delete ")]
-              )
-            ])
+                ]
+              },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default btn-xs",
+                    on: {
+                      click: function($event) {
+                        _vm.editing = true
+                      }
+                    }
+                  },
+                  [_vm._v("Edit")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger btn-xs",
+                    on: { click: _vm.destroy }
+                  },
+                  [_vm._v(" Delete ")]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _vm.authorize("updateThread", _vm.reply.thread) && !_vm.isBest
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success btn-xs ml-a",
+                    on: { click: _vm.markBest }
+                  },
+                  [_vm._v(" Best Reply? ")]
+                )
+              : _vm._e()
           ])
         : _vm._e()
     ]

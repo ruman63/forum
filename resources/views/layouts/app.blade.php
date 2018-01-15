@@ -24,6 +24,7 @@
         .flex { flex: 1; }
         .level > * { margin-left: 1em; }
         .level > *:first-child { margin-left: 0;}
+        .ml-a { margin-left:auto; }
         [v-cloak] { display: none; }
     </style>
     @yield('header')

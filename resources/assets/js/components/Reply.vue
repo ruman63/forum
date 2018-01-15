@@ -1,5 +1,5 @@
 <template>
-    <div :id="'reply-' + id " class="panel panel-default">
+    <div :id="'reply-' + id " class="panel" :class="isBest ? 'panel-success' : 'panel-default'">
         <div class="panel-heading">
             <div class="level">
                 <span class="flex">
@@ -24,11 +24,12 @@
             </div>
             <article v-else v-html="body"></article>
         </div>
-        <div class="panel-footer" v-if="authorize('updateReply', reply)">
-            <div class="level">
+        <div class="panel-footer level" v-if="authorize('updateReply', reply) || ( authorize('updateThread', reply.thread) && !isBest )">
+            <div v-show="authorize('updateReply', reply)">
                 <button class="btn btn-default btn-xs" @click="editing = true" >Edit</button>
                 <button class="btn btn-danger btn-xs" @click="destroy"> Delete </button>
             </div>
+            <button class="btn btn-success btn-xs ml-a" @click="markBest" v-if="authorize('updateThread', reply.thread) && !isBest"> Best Reply? </button>
         </div>
     </div>
 </template>
@@ -51,6 +52,7 @@
                 editing: false,
                 reply: this.data,
                 body: '',
+                isBest: this.data.isBest,
             };
         },
         methods: {
@@ -74,10 +76,17 @@
                 axios.delete('/replies/' + this.data.id)
                     .then((response) => flash('Your reply was deleted!'));
                 this.$emit('deleted');
+            },
+            markBest() {
+                axios.post('/replies/' + this.id + '/best')
+                    .then(() => window.events.$emit('best-reply-selected', this.id));
             }
         },
         created() {
             this.body = this.data.body;
+            window.events.$on('best-reply-selected', (id) => {
+                this.isBest = (this.id === id);
+            });
         }
     }
 </script>
