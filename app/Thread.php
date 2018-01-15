@@ -109,6 +109,11 @@ class Thread extends Model
         return $this;
     }
 
+    public function markBestReply($reply)
+    {
+        return $this->update(['best_reply_id' => $reply->id]);
+    }
+
     public function setSlugAttribute($slug)
     {
         if (static::whereSlug($slug)->exists()) {

@@ -37,6 +37,17 @@ class RepliesTest extends TestCase
         ]);
         $this->assertEquals($reply->mentionedUsers(), ['john', 'jane_doe', 'someone-else']);
     }
+    
+    /** @test */
+    public function it_knows_if_it_is_a_best_reply()
+    {
+        $reply = create('App\Reply');
+        $this->assertFalse($reply->isBest());
+        
+        $reply->thread->update(['best_reply_id' => $reply->id]);
+
+        $this->assertTrue($reply->fresh()->isBest());
+    }
 
     /** @test */
     public function it_wraps_mentioned_users_names_int_the_body_within_anchor_tag()

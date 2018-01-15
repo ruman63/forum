@@ -48,6 +48,10 @@ class Reply extends Model
     {
         return $this->created_at > Carbon::now()->subMinute();
     }
+    public function isBest()
+    {
+        return !!$this->thread->best_reply_id;
+    }
     
     public function path()
     {

@@ -118,4 +118,15 @@ class ThreadsTest extends TestCase
 
         $this->assertEquals(1, $thread->visits);
     }
+
+    /** @test */
+    public function it_can_mark_a_best_reply()
+    {
+        $thread = create('App\Thread');
+        $reply = create('App\Reply', ['thread_id' => $thread->id]);
+
+        $this->assertNull($thread->best_reply_id);
+        $thread->markBestReply($reply);
+        $this->assertEquals($thread->fresh()->best_reply_id, $reply->id);
+    }
 }
