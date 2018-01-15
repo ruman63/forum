@@ -86,11 +86,33 @@ class CreateThreadTest extends TestCase
     {
         $this->signIn();
         
-        $thread = create('App\Thread', ['title' => 'See My Post', 'slug' => 'see-my-post']);
+        create('App\Thread', [], 2);
+        
+        $thread = create('App\Thread', ['title' => 'See My Post']);
 
         $this->post('/threads', $thread->toArray());
 
-        $this->assertDatabaseHas('threads', ['title' => 'See My Post', 'slug' => 'see-my-post-2']);
+        $this->assertDatabaseHas('threads', ['title' => 'See My Post', 'slug' => 'see-my-post-4']);
+
+        $this->post('/threads', $thread->toArray());
+
+        $this->assertDatabaseHas('threads', ['title' => 'See My Post', 'slug' => 'see-my-post-5']);
+    }
+
+    /** @test */
+    public function a_thread_that_has_title_ending_with_number_shoud_genereate_proper_slug()
+    {
+        $this->signIn();
+        
+        $thread = create('App\Thread', ['title' => 'Number Title 24']);
+
+        $this->post('/threads', $thread->toArray());
+
+        $this->assertDatabaseHas('threads', ['title' => 'Number Title 24', 'slug' => 'number-title-24-2']);
+
+        $this->post('/threads', $thread->toArray());
+
+        $this->assertDatabaseHas('threads', ['title' => 'Number Title 24', 'slug' => 'number-title-24-3']);
     }
     
     /////////////////////////////////////////////////////////

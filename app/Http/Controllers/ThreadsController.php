@@ -56,10 +56,8 @@ class ThreadsController extends Controller
             'body' => ['required', new SpamFree],
             'channel_id' => 'required|exists:channels,id',
         ]);
-        $title = request('title');
         $thread = Thread::create([
-            'title' => title_case($title),
-            'slug' => $title,
+            'title' => title_case(request('title')),
             'body' => request('body'),
             'channel_id' => request('channel_id'),
             'user_id' => auth()->id(),

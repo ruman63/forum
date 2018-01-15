@@ -29,6 +29,10 @@ class Thread extends Model
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
+
+        static::created(function ($thread) {
+            $thread->update(['slug' => str_slug($thread->title)]);
+        });
     }
     
     public function owner()
@@ -105,26 +109,15 @@ class Thread extends Model
         return $this;
     }
 
-    public function setSlugAttribute($value)
+    public function setSlugAttribute($slug)
     {
-        if (static::whereSlug($slug = str_slug($value))->exists()) {
-            $this->attributes['slug'] = $this->incrementSlug($slug);
+        if (static::whereSlug($slug)->exists()) {
+            $this->attributes['slug'] = "{$slug}-{$this->id}";
         } else {
             $this->attributes['slug'] = $slug;
         }
     }
 
-    public function incrementSlug($slug)
-    {
-        $latest = static::whereTitle($this->title)->latest('id')->value('slug');
-        if (preg_match('/(\d)$/', $latest)) {
-            return preg_replace_callback('/(\d+)$/', function ($matches) {
-                return $matches[1] + 1;
-            }, $latest);
-        } else {
-            return "{$slug}-2";
-        }
-    }
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()
