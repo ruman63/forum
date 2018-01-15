@@ -4,7 +4,7 @@
             <img :src="avatar" :alt="user.name" width="50" height="50">
             <h2  class="flex" v-text="user.name"></h2>
         </div>
-        <form v-if="canUpload">
+        <form v-if="authorize('updateProfile',user)">
             <image-upload name="avatar" @uploaded="persist"></image-upload>
         </form>
     </div>

@@ -28,9 +28,6 @@
             }
         },
         computed: {
-            signedIn() {
-                return window.App.signedIn;
-            },
             url() {
                 return location.pathname + '/replies';
             }

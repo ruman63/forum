@@ -24,7 +24,7 @@
             </div>
             <article v-else v-html="body"></article>
         </div>
-        <div class="panel-footer" v-if="canUpdate">
+        <div class="panel-footer" v-if="authorize('updateReply', reply)">
             <div class="level">
                 <button class="btn btn-default btn-xs" @click="editing = true" >Edit</button>
                 <button class="btn btn-danger btn-xs" @click="destroy"> Delete </button>
@@ -41,16 +41,8 @@
         props: ['data'],
         components: { Favorite },
         computed: {
-            signedIn() {
-                return window.App.signedIn;
-            },
             ago() {
                 return moment(this.reply.created_at).fromNow();
-            },
-            canUpdate() {
-                return this.authorize(user => {
-                    return user.id == this.reply.user_id;
-                })
             }     
         },
         data() {
