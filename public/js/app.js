@@ -48056,6 +48056,9 @@ module.exports = {
     },
     updateThread: function updateThread(thread) {
         return thread.user_id === user.id;
+    },
+    isAdmin: function isAdmin() {
+        return user.is_admin;
     }
 };
 
@@ -60274,12 +60277,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['initialRepliesCount'],
+    props: ['thread'],
     components: { Replies: __WEBPACK_IMPORTED_MODULE_0__components_Replies_vue___default.a, SubscribeButton: __WEBPACK_IMPORTED_MODULE_1__components_SubscribeButton_vue___default.a },
     data: function data() {
         return {
-            repliesCount: this.initialRepliesCount
+            repliesCount: this.thread.repliesCount,
+            locked: this.thread.locked
         };
+    },
+
+    methods: {
+        toggleLock: function toggleLock() {
+            var _this = this;
+
+            axios[this.locked ? 'delete' : 'post']('/lock-threads/' + this.thread.slug).then(function () {
+                _this.locked = !_this.locked;
+                flash('Thread has been ' + (_this.locked ? 'Locked' : 'Unlocked') + '!');
+            });
+        }
     }
 });
 
@@ -60351,11 +60366,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['locked'],
     components: { Reply: __WEBPACK_IMPORTED_MODULE_0__Reply_vue___default.a, NewReply: __WEBPACK_IMPORTED_MODULE_1__NewReply_vue___default.a },
     mixins: [__WEBPACK_IMPORTED_MODULE_2__mixins_collection__["a" /* default */]],
     data: function data() {
@@ -63020,7 +63039,13 @@ var render = function() {
         on: { changed: _vm.fetch }
       }),
       _vm._v(" "),
-      _c("new-reply", { on: { created: _vm.add } })
+      _vm.locked
+        ? _c("p", [
+            _vm._v(
+              "\n        Thread has been locked by Administrator. No more replies can be added!\n    "
+            )
+          ])
+        : _c("new-reply", { on: { created: _vm.add } })
     ],
     2
   )

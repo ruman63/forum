@@ -4,7 +4,10 @@
             <reply  :data="reply" @deleted="remove(index)" ></reply>
         </div>
         <paginator :data-set="dataSet" @changed="fetch"></paginator>
-        <new-reply @created="add"></new-reply>
+        <p v-if="locked">
+            Thread has been locked by Administrator. No more replies can be added!
+        </p>
+        <new-reply v-else @created="add"></new-reply>
     </div>
 </template>
 
@@ -13,6 +16,7 @@ import Reply from './Reply.vue';
 import NewReply from './NewReply.vue';
 import collection from '../mixins/collection';
 export default {
+    props: ['locked'],
     components: { Reply, NewReply },
     mixins: [ collection ],
     data() {

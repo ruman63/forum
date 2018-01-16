@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="/css/vendor/jquery.atwho.css">
 @endsection
 @section('content')
-<thread-view initial-replies-count="{{ $thread->replies_count }}" inline-template>
+<thread-view :thread="{{ $thread }}" inline-template> 
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -29,7 +29,7 @@
                         </article>
                     </div>
                 </div>
-                <replies @removed="repliesCount--" @added="repliesCount++"></replies>
+                <replies :locked="locked" @removed="repliesCount--" @added="repliesCount++"></replies>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-default">
@@ -39,7 +39,8 @@
                             <a href="/profiles/{{ $thread->owner->name }}">{{ $thread->owner->name }}</a> and has currently has 
                             <span v-text="repliesCount"></span> {{ str_plural('reply', $thread->replies_count) }}
                         </p>
-                        <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></subscribe-button>
+                        <subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}" v-if="signedIn"></subscribe-button>
+                        <button class="btn btn-danger" @click="toggleLock" v-if="authorize('isAdmin')" v-text="locked ? 'Unlock' : 'Lock'"></button>
                     </div>
                 </div>
             </div>
