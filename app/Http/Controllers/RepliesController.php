@@ -34,6 +34,10 @@ class RepliesController extends Controller
      */
     public function store($channelId, Thread $thread, CreateReplyRequest $request)
     {
+        if ($thread->locked) {
+            return response('This threads is locked, you are not allowed to reply.', 422);
+        }
+        
         return $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id(),

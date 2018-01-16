@@ -31,6 +31,9 @@ Route::get('threads/{channel}/{thread}/replies', "RepliesController@index")->nam
 Route::post('threads/{channel}/{thread}/subscriptions', "ThreadSubscriptionsController@store")->name('thread.subscriptions.store');
 Route::delete('threads/{channel}/{thread}/subscriptions', "ThreadSubscriptionsController@destroy")->name('thread.subscriptions.destroy');
 
+Route::post('lock-threads/{thread}', "LockThreadsController@store")->name('lock-threads.store');
+Route::delete('lock-threads/{thread}', "LockThreadsController@destroy")->name('lock-threads.destroy');
+
 Route::post('replies/{reply}/favorite', "FavoritesController@store")->name('replies.favorite');
 Route::delete('replies/{reply}/favorite', "FavoritesController@destroy")->name('replies.unfavorite');
 Route::patch('replies/{reply}', "RepliesController@update")->name('replies.update');

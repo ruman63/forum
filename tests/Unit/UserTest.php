@@ -30,4 +30,13 @@ class UserTest extends TestCase
 
         $this->assertEquals(asset('storage/avatars/me.jpg'), $user->avatar_path);
     }
+
+    /** @test */
+    public function it_knows_if_user_is_an_administrator()
+    {
+        $adminUser = factory('App\User')->states('admin')->create();
+        $normalUser = create('App\User');
+        $this->assertFalse($normalUser->isAdmin());
+        $this->assertTrue($adminUser->isAdmin());
+    }
 }

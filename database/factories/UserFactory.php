@@ -24,9 +24,16 @@ $factory->define(App\User::class, function (Faker $faker) {
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
         'confirmed' => true,
+        'is_admin' => false,
     ];
 });
 
+
+$factory->state(App\User::class, 'admin', function (Faker $faker) {
+    return [
+        'is_admin' => true,
+    ];
+});
 
 $factory->state(App\User::class, 'unconfirmed', function (Faker $faker) {
     return [
@@ -41,6 +48,7 @@ $factory->define(App\Thread::class, function (Faker $faker) {
         'slug' => str_slug($title),
         'body' => $faker->paragraph,
         'visits' => 0,
+        'locked' => false,
         'user_id' => function () {
             return factory(App\User::class)->create()->id;
         },

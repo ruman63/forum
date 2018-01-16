@@ -31,8 +31,13 @@ class User extends Authenticatable
 
     protected $casts = [
         'confirmed' => 'boolean',
+        'is_admin' => 'boolean',
     ];
 
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
 
     public function confirm()
     {
