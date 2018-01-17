@@ -7,28 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="level">
-                            <img src="{{ asset($thread->owner->avatar_path) }}" alt="{{ $thread->owner->name }}" width="25" >
-                            <h4 class="flex">
-                                <a href="/profiles/{{ $thread->owner->name }}">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
-                            </h4> 
-                            @can('update', $thread)
-                                <form method="POST" action="{{ '/threads/'. $thread->channel->slug . '/' . $thread->slug }}">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-link">Delete</button>
-                                </form>
-                            @endcan
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <article>
-                            {{ $thread->body }}
-                        </article>
-                    </div>
-                </div>
+                @include('threads._content')
                 <replies :locked="locked" @removed="repliesCount--" @added="repliesCount++"></replies>
             </div>
             <div class="col-md-4">

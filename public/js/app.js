@@ -60282,7 +60282,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             repliesCount: this.thread.repliesCount,
-            locked: this.thread.locked
+            locked: this.thread.locked,
+            title: this.thread.title,
+            body: this.thread.body,
+            form: {},
+            editing: false
         };
     },
 
@@ -60290,11 +60294,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         toggleLock: function toggleLock() {
             var _this = this;
 
-            axios[this.locked ? 'delete' : 'post']('/lock-threads/' + this.thread.slug).then(function () {
+            var url = '/lock-threads/' + this.thread.slug;
+            axios[this.locked ? 'delete' : 'post'](url).then(function () {
                 _this.locked = !_this.locked;
                 flash('Thread has been ' + (_this.locked ? 'Locked' : 'Unlocked') + '!');
             });
+        },
+        update: function update() {
+            var _this2 = this;
+
+            var url = '/threads/' + this.thread.channel.slug + '/' + this.thread.slug;
+            axios.patch(url, this.form).then(function () {
+                flash('Your thread has been updated!');
+                _this2.title = _this2.form.title;
+                _this2.body = _this2.form.body;
+                _this2.editing = false;
+            });
+        },
+        resetForm: function resetForm() {
+            this.form = {
+                title: this.thread.title,
+                body: this.thread.body
+            };
+            this.editing = false;
         }
+    },
+    created: function created() {
+        this.resetForm();
     }
 });
 
