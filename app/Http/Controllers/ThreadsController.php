@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Filters\ThreadsFilter;
 use Illuminate\Support\Facades\Redis;
 use App\Trending;
+use App\Rules\Recaptcha;
 
 class ThreadsController extends Controller
 {
@@ -49,12 +50,13 @@ class ThreadsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request, Recaptcha $recaptcha)
     {
         request()->validate([
             'title' => ['required', new SpamFree],
             'body' => ['required', new SpamFree],
             'channel_id' => 'required|exists:channels,id',
+            'g-recaptcha-response' => ['required', $recaptcha],
         ]);
         $thread = Thread::create([
             'title' => title_case(request('title')),
