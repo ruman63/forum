@@ -1,3 +1,4 @@
+{{--  Editing the thread  --}}
 <div class="panel panel-default" v-if="editing">
     <div class="panel-heading">
         <h4>
@@ -19,7 +20,7 @@
         </div>
     </div>
 </div>
-
+{{--  Viewing the Thread  --}}
 <div class="panel panel-default" v-else>
     <div class="panel-heading">
         <div class="level">
