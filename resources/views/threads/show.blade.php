@@ -15,7 +15,7 @@
                                 <a href="/profiles/{{ $thread->owner->name }}">{{ $thread->owner->name }}</a> <small>posted</small> {{ $thread->title }}
                             </h4> 
                             @can('update', $thread)
-                                <form method="POST" action="{{ '/threads/'. $thread->channel->slug . '/' . $thread->id }}">
+                                <form method="POST" action="{{ '/threads/'. $thread->channel->slug . '/' . $thread->slug }}">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <button type="submit" class="btn btn-link">Delete</button>
