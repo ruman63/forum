@@ -6,9 +6,10 @@
  */
 require('./bootstrap');
 import authorizations from './authorizations';
-
+import InstantSearch from 'vue-instantsearch';
 window.Vue = require('vue');
 
+Vue.use(InstantSearch);
 Vue.prototype.signedIn = window.App.signedIn;
 Vue.prototype.authorize = function (...params) {
     if(!window.App.user) return false;

@@ -25,6 +25,7 @@
         .level > * { margin-left: 1em; }
         .level > *:first-child { margin-left: 0;}
         .ml-a { margin-left:auto; }
+        .ais-highlight em { background-color: yellow; font-style: normal}
         [v-cloak] { display: none; }
     </style>
     @yield('header')

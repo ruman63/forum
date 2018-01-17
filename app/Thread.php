@@ -11,10 +11,11 @@ use App\Notifications\YourMention;
 use Illuminate\Database\Eloquent\Model;
 use App\Notifications\ThreadWasUpdated;
 use App\Events\ThreadReceivedReply;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, Searchable;
     
     protected $guarded = [];
 
@@ -137,5 +138,10 @@ class Thread extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function toSearchableArray()
+    {
+        return $this->toArray() + ['path' => $this->path()];
     }
 }

@@ -19,6 +19,7 @@ Route::get('/register/confirm', 'Auth\RegisterConfirmController@index')->name('r
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('threads/create', "ThreadsController@create")->name('threads.create');
+Route::get('threads/search', "SearchController@show")->name('search');
 Route::get('threads/{channel}/{thread}', "ThreadsController@show")->name('threads.show');
 Route::patch('threads/{channel}/{thread}', "ThreadsController@update")->name('threads.update');
 Route::delete('threads/{channel}/{thread}', "ThreadsController@destroy")->name('threads.destroy');

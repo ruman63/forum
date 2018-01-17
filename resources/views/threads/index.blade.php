@@ -10,6 +10,23 @@
             </p>
         </div>
         <div class="col-md-4">
+            <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Search
+                    </div>
+                    <div class="panel-body">
+                        <form action="/threads/search">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="q" placeholder="Search for Threads...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Search</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             @if( count($trendingThreads))
                 <div class="panel panel-default">
                     <div class="panel-heading">
