@@ -6,7 +6,7 @@
         </h4> 
     </div>
     <div class="panel-body">
-        <textarea class="form-control" v-model="form.body"></textarea>
+        <wysiwyg v-model="form.body"></wysiwyg>
     </div>
     <div class="panel-footer">
         <div class="level">
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <article v-text="body"></article>
+        <article v-html="body"></article>
     </div>
     <div class="panel-footer">
         @can('update', $thread)

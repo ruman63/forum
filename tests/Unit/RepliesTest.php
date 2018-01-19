@@ -57,4 +57,13 @@ class RepliesTest extends TestCase
         ]);
         $this->assertEquals($reply->body, 'hello, <a href="/profiles/john">@john</a>!');
     }
+
+    /** @test */
+    public function it_cleans_the_body_field_for_unwanted_html_tags()
+    {
+        $reply = create('App\Reply', [
+            'body' => "<script>alert('foo')</script><p>Hello there <a href=\"#\" onclick=\"alert('gotcha');\">Click Me</a></p>"
+        ]);
+        $this->assertEquals($reply->body, "<p>Hello there <a href=\"#\">Click Me</a></p>");
+    }
 }

@@ -3,14 +3,7 @@
         <div v-if="signedIn">
             <form @submit.prevent="create">
                 <div class="form-group">
-                    <textarea name="body" 
-                        id="body"
-                        class="form-control" 
-                        rows="6" 
-                        v-model="body"
-                        placeholder="Have something to say..."
-                        required>
-                    </textarea>
+                    <wysiwyg v-model="body" placeholder="Have something to say..." :shouldClear="completed"></wysiwyg>
                 </div>
                 <button type="submit" class="btn btn-default">Reply</button>
             </form>
@@ -24,7 +17,8 @@
     export default {
         data() {
             return {
-                body: ''
+                body: '',
+                completed: false,
             }
         },
         computed: {
@@ -38,6 +32,7 @@
                     .catch(error => flash( error.response.data, 'danger' ))
                     .then(({data}) => {
                         this.body = '';
+                        this.completed = true;
                         flash('Your reply was left');
                         this.$emit('created', data);
                     });
@@ -49,7 +44,6 @@
                 delay: 750,
                 callbacks: {
                     remoteFilter: function(query, callback) {
-                        console.log(query);
                         axios.get('/api/users', {
                             params: {
                                 name: query

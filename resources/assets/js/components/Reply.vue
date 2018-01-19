@@ -14,7 +14,7 @@
             <div v-if="editing">
                 <form @submit.prevent="update">
                     <div class="form-group">
-                        <textarea class="form-control" v-model="body" required></textarea>
+                        <wysiwyg v-model="body"></wysiwyg>
                     </div>
                     <div class="level">
                         <button class="btn btn-primary btn-xs" type="submit">Update</button>
@@ -69,7 +69,7 @@
                 this.editing = false;
             },
             cancel() {
-                editing = false; 
+                this.editing = false; 
                 this.body = this.data.body;
             },
             destroy() {
@@ -79,7 +79,10 @@
             },
             markBest() {
                 axios.post('/replies/' + this.id + '/best')
-                    .then(() => window.events.$emit('best-reply-selected', this.id));
+                    .then(() => {
+                        flash('Best reply was marked!');
+                        window.events.$emit('best-reply-selected', this.id)
+                    });
             }
         },
         created() {

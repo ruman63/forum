@@ -23,7 +23,7 @@
         </div>
         <div class="panel-body">
             <article>
-                {{ $thread->body }}
+                {!! $thread->body !!}
             </article>
         </div>
         <div class="panel-footer">

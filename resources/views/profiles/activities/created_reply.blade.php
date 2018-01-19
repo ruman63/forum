@@ -5,7 +5,7 @@
     @endslot
     @slot('body')
         <article>
-            {{ $activity->subject->body }}
+            {!! $activity->subject->body !!}
         </article>
     @endslot
 @endcomponent

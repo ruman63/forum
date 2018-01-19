@@ -27,7 +27,7 @@
                             <input type="text" name="title" value="{{ old('title') }}" required placeholder="Give it a Title!" class="form-control">
                         </div>
                         <div class="form-group">
-                            <textarea name="body" id="body" class="form-control" rows="8" placeholder="Write Something Amazing!" required>{{ old('body') }}</textarea>
+                            <wysiwyg name="body" placeholder="Ask your question..."></wysiwyg>
                         </div>
                         <div class="form-group">
                             <div class="g-recaptcha" data-sitekey="6LeFLEEUAAAAAGk0gyssw0spvMw3hXjbGj62aBeO"></div>

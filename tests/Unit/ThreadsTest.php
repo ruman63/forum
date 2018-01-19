@@ -129,4 +129,13 @@ class ThreadsTest extends TestCase
         $thread->markBestReply($reply);
         $this->assertEquals($thread->fresh()->best_reply_id, $reply->id);
     }
+
+    /** @test */
+    public function it_cleans_the_body_field_for_unwanted_html_tags()
+    {
+        $thread = create('App\Thread', [
+            'body' => "<script>alert('foo')</script><p>Hello there <a href=\"#\" onclick=\"alert('gotcha');\">Click Me</a></p>"
+        ]);
+        $this->assertEquals($thread->body, "<p>Hello there <a href=\"#\">Click Me</a></p>");
+    }
 }
